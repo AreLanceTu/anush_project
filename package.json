@@ -1,0 +1,23 @@
+{
+  "name": "sem6-project",
+  "version": "1.0.0",
+  "main": "firebase-config.js",
+  "scripts": {
+    "dev": "vite",
+    "sync:public": "node tools/sync-public.js",
+    "sync:public:dry": "node tools/sync-public.js --dry-run",
+    "migrate:chat:supabase": "node tools/migrate-firestore-chat-to-supabase.js",
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.90.1",
+    "firebase-admin": "^13.5.0",
+    "live-server": "^1.2.2",
+    "vite": "^7.3.1"
+  }
+}

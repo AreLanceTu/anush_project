@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Profile</title>
+    <link rel="stylesheet" href="./profile.css" />
+  </head>
+  <body>
+    <main class="profile-page">
+      <section class="profile-card" id="profileCard">
+        <div class="topbar">
+          <div>
+            <div class="ttl">Profile</div>
+            <div class="subttl">Profile details</div>
+          </div>
+        </div>
+        <div class="divider"></div>
+        <div class="header">
+          <div class="avatar"><img id="profileAvatar" src="../Boysimage/pinterest1.jpeg" alt="Profile photo" /></div>
+          <div class="nameLine">
+            <div class="name">
+              <span id="profileName">Pranav Reddy</span>
+              <span class="username" id="profileUsername">@pranavreddy</span>
+            </div>
+            <div class="subRow">
+              <span>Gender:&nbsp; <b id="profileGender">Male</b></span>
+              <span>Birthday:&nbsp; <b id="profileDob">—</b></span>
+              <span style="display:inline-flex;align-items:center;gap:10px;">
+                <span class="flag" id="profileCountryFlag" aria-hidden="true">🇮🇳</span>
+                <b id="profileCountry">India</b>
+              </span>
+            </div>
+            <div class="zodiacRow" id="profileZodiac">Zodiac: —</div>
+          </div>
+        </div>
+        <div class="profile-gallery">
+          <div class="gallery-title">Photo Gallery</div>
+          <div class="gallery-grid">
+            <div class="gallery-card">
+              <img id="galleryLarge1" src="../Boysimage/pinterest1.jpeg" alt="Gallery photo 1" />
+            </div>
+            <div class="gallery-card">
+              <img id="galleryLarge2" src="../Boysimage/pinterest1.jpeg" alt="Gallery photo 2" />
+            </div>
+            <div class="gallery-card">
+              <img id="galleryLarge3" src="../Boysimage/pinterest1.jpeg" alt="Gallery photo 3" />
+            </div>
+          </div>
+        </div>
+        <div class="rows">
+          <div class="row locked">
+            <div class="l">
+              <div class="k">Religion</div>
+              <div class="v" id="profileReligion">—</div>
+            </div>
+          </div>
+          <div class="row locked">
+            <div class="l">
+              <div class="k">Marital Status</div>
+              <div class="v" id="profileMarital">—</div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="l">
+              <div class="k">Company</div>
+              <div class="v" id="profileCompany">—</div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="l">
+              <div class="k">Job / Profession</div>
+              <div class="v" id="profileJob">—</div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="l">
+              <div class="k">Qualification</div>
+              <div class="v" id="profileQualification">—</div>
+            </div>
+          </div>
+          <div class="row likeRow">
+            <div class="l">
+              <div class="k">Popularity</div>
+              <div class="v"><span class="likeCount" id="likeCount">0</span> Likes</div>
+            </div>
+            <button class="likeBtn" id="likeBtn" type="button" aria-label="Like profile">❤️ Like</button>
+          </div>
+          <div class="aboutRow">
+            <div class="k">Hobby</div>
+            <div class="v" id="profileHobby">—</div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <script type="module" src="./profile.js"></script>
+  </body>
+</html>

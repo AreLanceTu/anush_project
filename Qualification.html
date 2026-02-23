@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>College & Qualification Form</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Montserrat', sans-serif;
+    }
+  
+    body, html {
+      height: 100%;
+      width: 100%;
+    }
+  
+    /* 🔥 Background */
+    .hero {
+      background: #9e2f36;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      color: white;
+    }
+  
+    /* 🔥 Card */
+    .register-card {
+      position: relative;
+      z-index: 2;
+      max-width: 420px;
+      width: 90%;
+      padding: 40px;
+      border-radius: 14px;
+      background: linear-gradient(180deg, #3a0c10, #1b0507);
+      box-shadow: 0 25px 60px rgba(0,0,0,0.6);
+      color: #fff;
+      text-align: center;
+    }
+  
+    h2 {
+      margin-bottom: 28px;
+      font-size: 26px;
+      font-weight: 700;
+      color: #ffffff;
+    }
+  
+    .form-group {
+      margin-bottom: 18px;
+      text-align: left;
+    }
+  
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #f1f1f1;
+    }
+  
+    input, select {
+      width: 100%;
+      padding: 13px 15px;
+      border-radius: 8px;
+      border: none;
+      background: #0f0203;
+      color: #ffffff;
+      font-size: 15px;
+    }
+  
+    input:focus, select:focus {
+      outline: none;
+      background: #1a0507;
+    }
+  
+    select option {
+      background: #0f0203;
+      color: #ffffff;
+    }
+  
+    .continue-btn {
+      width: 100%;
+      padding: 14px;
+      margin-top: 25px;
+      border-radius: 8px;
+      border: none;
+      background-color: #ff2d55;
+      color: #ffffff;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+  
+    .continue-btn:hover {
+      background-color: #e0244b;
+    }
+  
+    .error-message {
+      color: #ff6347;
+      text-align: center;
+      margin-top: 15px;
+      font-size: 14px;
+    }
+  </style>
+  
+</head>
+<body>
+  <div class="hero">
+    <div class="register-card">
+      <h2>Qualification</h2>
+      <form>
+        <!-- College Input -->
+        <div class="form-group">
+          <label for="college">College Name</label>
+          <input type="text" id="college" name="college" placeholder="Enter your college name">
+        </div>
+
+        <!-- Qualification Dropdown -->
+        <div class="form-group">
+          <label for="qualification">Qualification</label>
+          <select id="qualification" name="qualification">
+            <option value="">Select Qualification</option>
+
+            <!-- Engineering -->
+            <optgroup label="Engineering">
+              <option value="btech_cs">B.Tech - Computer Science</option>
+              <option value="btech_me">B.Tech - Mechanical</option>
+              <option value="btech_ee">B.Tech - Electrical</option>
+              <option value="btech_ce">B.Tech - Civil</option>
+              <option value="btech_it">B.Tech - IT</option>
+              <option value="btech_ec">B.Tech - Electronics</option>
+              <option value="btech_che">B.Tech - Chemical</option>
+              <option value="btech_biotech">B.Tech - Biotechnology</option>
+              <option value="btech_aero">B.Tech - Aerospace</option>
+              <option value="btech_env">B.Tech - Environmental</option>
+            </optgroup>
+
+            <!-- Commerce -->
+            <optgroup label="Commerce">
+              <option value="bcom">B.Com</option>
+              <option value="bba">BBA</option>
+              <option value="ca">CA</option>
+              <option value="cma">CMA</option>
+              <option value="cs">CS</option>
+              <option value="bcom_hons">B.Com Hons</option>
+              <option value="bms">BMS</option>
+              <option value="baf">BAF</option>
+              <option value="bim">BIM</option>
+              <option value="bbm">BBM</option>
+            </optgroup>
+
+            <!-- Arts -->
+            <optgroup label="Arts">
+              <option value="ba_history">BA - History</option>
+              <option value="ba_english">BA - English</option>
+              <option value="ba_political">BA - Political Science</option>
+              <option value="ba_psychology">BA - Psychology</option>
+              <option value="ba_philosophy">BA - Philosophy</option>
+              <option value="ba_sociology">BA - Sociology</option>
+              <option value="ba_economics">BA - Economics</option>
+              <option value="ba_education">BA - Education</option>
+              <option value="ba_geography">BA - Geography</option>
+              <option value="ba_music">BA - Music</option>
+            </optgroup>
+
+            <!-- BSc -->
+            <optgroup label="BSc">
+              <option value="bsc_math">BSc - Mathematics</option>
+              <option value="bsc_physics">BSc - Physics</option>
+              <option value="bsc_chemistry">BSc - Chemistry</option>
+              <option value="bsc_biology">BSc - Biology</option>
+              <option value="bsc_cs">BSc - Computer Science</option>
+              <option value="bsc_stats">BSc - Information Technology</option>
+              <option value="bsc_micro">BSc - Microbiology</option>
+              <option value="bsc_env">BSc - Environmental Science</option>
+              <option value="bsc_geo">BSc - Geology</option>
+              <option value="bsc_biotech">BSc - Biotechnology</option>
+            </optgroup>
+
+            <!-- Masters -->
+            <optgroup label="Masters">
+              <option value="ma_english">MA - English</option>
+              <option value="ma_history">MA - History</option>
+              <option value="ma_political">MA - Political Science</option>
+              <option value="ma_psychology">MA - Psychology</option>
+              <option value="ma_economics">MSc - Information Technology</option>
+              <option value="msc_cs">MSc - Computer Science</option>
+              <option value="msc_physics">MSc - Physics</option>
+              <option value="msc_chemistry">MSc - Chemistry</option>
+              <option value="mba">MBA</option>
+              <option value="mcom">M.Com</option>
+            </optgroup>
+
+            <!-- PhD -->
+            <optgroup label="PhD">
+              <option value="phd_cs">PhD - Computer Science</option>
+              <option value="phd_physics">PhD - Physics</option>
+              <option value="phd_chemistry">PhD - Chemistry</option>
+              <option value="phd_biology">PhD - Biology</option>
+              <option value="phd_economics">PhD - Economics</option>
+              <option value="phd_politics">PhD - Political Science</option>
+              <option value="phd_psychology">PhD - Psychology</option>
+              <option value="phd_history">PhD - History</option>
+              <option value="phd_english">PhD - English</option>
+              <option value="phd_education">PhD - Education</option>
+            </optgroup>
+
+            <!-- 10th and 12th Pass -->
+            <optgroup label="School">
+              <option value="10th">10th Pass</option>
+              <option value="12th">12th Pass</option>
+            </optgroup>
+          </select>
+        </div>
+
+        <button type="submit" class="continue-btn">Submit</button>
+      </form>
+    </div>
+  </div>
+  <script type="module" src="./script.js/Qualification.js"></script>
+</body>
+</html>

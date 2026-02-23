@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vivah – Find Your Forever</title>
+  <meta http-equiv="refresh" content="0; url=introduction.html" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .container {
+      text-align: center;
+      background: white;
+      padding: 50px;
+      border-radius: 10px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      max-width: 500px;
+    }
+    h1 {
+      color: #667eea;
+      margin-bottom: 20px;
+      font-size: 2.5em;
+    }
+    p {
+      color: #666;
+      margin-bottom: 30px;
+      font-size: 1.1em;
+    }
+    .nav-buttons {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    a {
+      padding: 12px 25px;
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: all 0.3s ease;
+      display: inline-block;
+    }
+    .btn-primary {
+      background: #667eea;
+      color: white;
+    }
+    .btn-primary:hover {
+      background: #5568d3;
+      transform: translateY(-2px);
+    }
+    .btn-secondary {
+      background: #764ba2;
+      color: white;
+    }
+    .btn-secondary:hover {
+      background: #653a8a;
+      transform: translateY(-2px);
+    }
+    .btn-tertiary {
+      background: #E34450;
+      color: white;
+    }
+    .btn-tertiary:hover {
+      background: #c92d3c;
+      transform: translateY(-2px);
+    }
+  </style>
+</head>
+<body>
+  <script>
+    // Vite/local dev serves this file at '/'.
+    // Redirect so localhost always starts from introduction.html.
+    window.location.replace('introduction.html');
+  </script>
+
+  <div class="container">
+    <h1>Vivah</h1>
+    <p>Redirecting to the introduction page…</p>
+    <div class="nav-buttons">
+      <a href="introduction.html" class="btn-primary">Continue</a>
+    </div>
+  </div>
+</body>
+</html>

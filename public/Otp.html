@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Email Verification & Phone Capture</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Montserrat', sans-serif; }
+    body, html { height: 100%; width: 100%; }
+    .hero { background: #9e2f36; min-height: 100vh; display: flex; justify-content: center; align-items: center; }
+    .register-card { max-width: 420px; width: 90%; padding: 40px; border-radius: 14px; background: linear-gradient(180deg, #3a0c10, #1b0507); box-shadow: 0 25px 60px rgba(0,0,0,0.6); color: #fff; }
+    h2 { text-align: center; margin-bottom: 28px; font-size: 26px; font-weight: 700; }
+    .form-group { margin-bottom: 18px; }
+    label { display: block; margin-bottom: 8px; font-size: 14px; font-weight: 600; color: #f1f1f1; }
+    input { width: 100%; padding: 13px 15px; border-radius: 8px; border: none; background: #0f0203; color: #ffffff; font-size: 15px; }
+    input:focus { outline: none; background: #1a0507; }
+    .continue-btn { width: 100%; padding: 14px; margin-top: 25px; border-radius: 8px; border: none; background-color: #ff2d55; color: #ffffff; font-size: 16px; font-weight: 700; cursor: pointer; }
+    .continue-btn:hover { background-color: #e0244b; }
+    .error-message { color: #ff6347; text-align: center; margin-top: 15px; font-size: 14px; }
+  </style>
+</head>
+
+<body>
+  <div class="hero">
+    <div class="register-card">
+      <h2>Enter Email & Phone</h2>
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" placeholder="Your Email" required>
+      </div>
+      <div class="form-group">
+        <label for="phone">Phone Number</label>
+        <input type="text" id="phone" placeholder="Enter your mobile number" required>
+      </div>
+      <button id="sendButton" class="continue-btn">Send</button>
+      <div id="errorMessage" class="error-message"></div>
+    </div>
+  </div>
+
+  <!-- 🔥 Correct path to JS -->
+  <script type="module" src="script.js/otp.js"></script>
+</body>
+</html>

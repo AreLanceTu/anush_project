@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Profile</title>
+    <link rel="stylesheet" href="./profile.css" />
+    <style>
+      /* Glassmorphism My Account sidebar card */
+      .sidebar .card {
+        width: clamp(280px, 24vw, 340px);
+        border-radius: 28px;
+        border: 1px solid rgba(255, 255, 255, 0.42);
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0.14));
+        -webkit-backdrop-filter: blur(14px) saturate(130%);
+        backdrop-filter: blur(14px) saturate(130%);
+        box-shadow:
+          0 18px 42px rgba(16, 24, 40, 0.18),
+          inset 0 1px 0 rgba(255, 255, 255, 0.45);
+      }
+
+      .sidebar .card.pad {
+        padding: 18px;
+      }
+
+      .sidebar .cardTitle {
+        margin: 2px 4px 14px;
+        font-size: 16px;
+        text-align: left;
+      }
+
+      .sidebar .meRow {
+        justify-content: flex-start;
+        align-items: flex-start;
+        gap: 14px;
+        margin-bottom: 10px;
+      }
+
+      .sidebar .meMeta {
+        min-width: 0;
+        padding-top: 8px;
+      }
+
+      .sidebar .meMeta .sidebarLabel {
+        font-size: 15px;
+        font-weight: 700;
+        color: #132238;
+        line-height: 1.2;
+      }
+
+      .sidebar .meMeta .hint {
+        margin-top: 4px;
+        font-size: 12px;
+        color: #4b5d73;
+      }
+
+      .sidebar #avatarBox {
+        width: 112px;
+        height: 112px;
+        border-radius: 24px;
+        border: 1px solid rgba(255, 255, 255, 0.55);
+        background: rgba(255, 255, 255, 0.18);
+        box-shadow: 0 12px 24px rgba(16, 24, 40, 0.16);
+        margin-left: 2px;
+      }
+
+      /* Bottom 2 profile photos in sidebar */
+      #galleryThumbs {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+        margin-top: 12px;
+      }
+
+      #galleryThumbs .thumbPhoto {
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        display: block;
+        object-fit: cover;
+        object-position: center;
+        border-radius: 18px;
+        padding: 0;
+        background: rgba(255, 255, 255, 0.2);
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        box-shadow: 0 8px 16px rgba(16, 24, 40, 0.12);
+      }
+
+      /* Glassmorphism Profile section (matches My Account card style) */
+      .profile-card {
+        border-radius: 28px;
+        border: 1px solid rgba(255, 255, 255, 0.42);
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0.14));
+        -webkit-backdrop-filter: blur(14px) saturate(130%);
+        backdrop-filter: blur(14px) saturate(130%);
+        box-shadow:
+          0 18px 42px rgba(16, 24, 40, 0.18),
+          inset 0 1px 0 rgba(255, 255, 255, 0.45);
+      }
+
+      .profile-card .topbar {
+        padding: 14px 16px 10px;
+      }
+
+      .profile-card .ttl {
+        color: #102a43;
+      }
+
+      .profile-card .subttl {
+        color: #48627e;
+      }
+
+      .profile-card .divider {
+        background: rgba(255, 255, 255, 0.42);
+      }
+
+      .profile-card .header {
+        padding: 14px 16px 10px;
+      }
+
+      .profile-card .nameLine .name,
+      .profile-card .nameLine .name .username,
+      .profile-card .subRow b,
+      .profile-card .row .v,
+      .profile-card .aboutRow .v,
+      .profile-card .likeCount {
+        color: #102a43;
+      }
+
+      .profile-card .subRow,
+      .profile-card .row .k,
+      .profile-card .aboutRow .k,
+      .profile-card .nameLine .name .username {
+        color: #4b5d73;
+      }
+
+      .profile-card .flag,
+      .profile-card .zodiacRow,
+      .profile-card .row,
+      .profile-card .aboutRow,
+      .profile-card .aboutRow .v,
+      .profile-card .gallery-card {
+        border: 1px solid rgba(255, 255, 255, 0.46);
+        background: rgba(255, 255, 255, 0.2);
+        box-shadow: 0 10px 24px rgba(16, 24, 40, 0.08);
+      }
+
+      .profile-card .row.locked {
+        background: rgba(255, 255, 255, 0.16);
+      }
+
+      .profile-card .row .icon {
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        background: rgba(255, 255, 255, 0.22);
+        color: #3b536d;
+      }
+
+      .profile-card .rows {
+        padding: 8px 16px 16px;
+        gap: 12px;
+      }
+
+      .profile-card .profile-gallery {
+        padding: 8px 16px 4px;
+      }
+
+      .profile-card .likeBtn {
+        border: 1px solid rgba(255, 255, 255, 0.48);
+        background: rgba(255, 255, 255, 0.28);
+        color: #8a2034;
+        box-shadow: 0 6px 14px rgba(16, 24, 40, 0.1);
+      }
+
+      @media (max-width: 1100px) {
+        .sidebar .card {
+          width: 270px;
+          border-radius: 24px;
+        }
+
+        .sidebar #avatarBox {
+          width: 96px;
+          height: 96px;
+          border-radius: 20px;
+        }
+
+        .sidebar .meMeta {
+          padding-top: 4px;
+        }
+
+        .profile-card {
+          border-radius: 24px;
+        }
+      }
+
+      @media (max-width: 700px) {
+        .profile-card .topbar,
+        .profile-card .header,
+        .profile-card .rows,
+        .profile-card .profile-gallery {
+          padding-left: 12px;
+          padding-right: 12px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="profile-page">
+      <section class="profile-card" id="profileCard">
+        <div class="topbar">
+          <div>
+            <div class="ttl">Profile</div>
+            <div class="subttl">Profile details</div>
+          </div>
+        </div>
+        <div class="divider"></div>
+
+        <div class="header">
+          <div class="avatar"><img id="profileAvatar" alt="Profile photo" /></div>
+          <div class="nameLine">
+            <div class="name">
+              <span id="profileName">—</span>
+              <span class="username" id="profileUsername">@user</span>
+            </div>
+            <div class="subRow">
+              <span>Gender:&nbsp; <b id="profileGender">—</b></span>
+              <span>Birthday:&nbsp; <b id="profileDob">—</b></span>
+              <span style="display:inline-flex;align-items:center;gap:10px;">
+                <span class="flag" id="profileCountryFlag" aria-hidden="true">🌍</span>
+                <b id="profileCountry">—</b>
+              </span>
+            </div>
+            <div class="zodiacRow" id="profileZodiac">Zodiac: —</div>
+          </div>
+        </div>
+
+        <div class="profile-gallery">
+          <div class="gallery-title">Photo Gallery</div>
+          <div class="gallery-grid">
+            <div class="gallery-card">
+              <img id="galleryLarge1" alt="Gallery photo 1" />
+            </div>
+            <div class="gallery-card">
+              <img id="galleryLarge2" alt="Gallery photo 2" />
+            </div>
+            <div class="gallery-card">
+              <img id="galleryLarge3" alt="Gallery photo 3" />
+            </div>
+          </div>
+        </div>
+
+        <div class="rows">
+          <div class="row locked">
+            <div class="l">
+              <div class="k">Religion</div>
+              <div class="v" id="profileReligion">—</div>
+            </div>
+          </div>
+
+          <div class="row locked">
+            <div class="l">
+              <div class="k">Marital Status</div>
+              <div class="v" id="profileMarital">—</div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="l">
+              <div class="k">Company</div>
+              <div class="v" id="profileCompany">—</div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="l">
+              <div class="k">Job / Profession</div>
+              <div class="v" id="profileJob">—</div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="l">
+              <div class="k">Qualification</div>
+              <div class="v" id="profileQualification">—</div>
+            </div>
+          </div>
+
+          <div class="row likeRow">
+            <div class="l">
+              <div class="k">Popularity</div>
+              <div class="v"><span class="likeCount" id="likeCount">0</span> Likes</div>
+            </div>
+            <button class="likeBtn" id="likeBtn" type="button" aria-label="Like profile">❤️ Like</button>
+          </div>
+
+          <div class="aboutRow">
+            <div class="k">Hobby</div>
+            <div class="v" id="profileHobby">—</div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <img
+  src="../images/littleheart3.jpg"
+  alt="Little heart"
+  style="
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -1;
+  "
+/>
+<script type="module" src="./profile.js"></script>
+  </body>
+</html>

@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Account</title>
+
+    <style>
+      :root {
+        --bg: #fff1f5;
+        --card: #ffffff;
+        --text: #101828;
+        --muted: #667085;
+        --line: #eaecf0;
+        --soft: #f8fafc;
+        --soft2: #f2f4f7;
+        --accent: #ff5a7a;
+        --shadow: 0 18px 55px rgba(16, 24, 40, 0.12);
+        --radius: 22px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        height: 100%;
+      }
+
+      body {
+        margin: 0;
+        background-color: #f6dbe2;
+        background-image: url("./images/littleheart3.jpg");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        color: var(--text);
+        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans";
+      }
+
+      .pageHeader {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        background: rgba(255, 255, 255, 0.24);
+        -webkit-backdrop-filter: blur(14px) saturate(130%);
+        backdrop-filter: blur(14px) saturate(130%);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.42);
+      }
+
+      .pageHeaderInner {
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 10px 12px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 12px;
+      }
+
+      .dropdown {
+        position: relative;
+      }
+
+      .dropdown-toggle {
+        border: 1px solid rgba(234, 236, 240, 0.95);
+        background: #fff;
+        border-radius: 999px;
+        padding: 6px;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .dropdown-toggle:focus {
+        outline: 2px solid rgba(255, 90, 122, 0.25);
+        outline-offset: 2px;
+      }
+
+      .navbar-profile-img {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        object-fit: cover;
+        display: none;
+      }
+
+      .navbar-profile-img.show {
+        display: block;
+      }
+
+      .navbar-profile-fallback {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        background: rgba(255, 90, 122, 0.15);
+        display: grid;
+        place-items: center;
+        font-weight: 900;
+        color: #b42318;
+      }
+
+      .dropdown-menu {
+        position: absolute;
+        right: 0;
+        top: calc(100% + 8px);
+        width: 260px;
+        background: #fff;
+        border: 1px solid rgba(234, 236, 240, 0.95);
+        border-radius: 16px;
+        box-shadow: var(--shadow);
+        padding: 10px;
+        display: none;
+      }
+
+      .dropdown.open .dropdown-menu {
+        display: block;
+      }
+
+      .dropdown-user {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .dropdown-user-avatar {
+        width: 44px;
+        height: 44px;
+        border-radius: 14px;
+        object-fit: cover;
+        display: none;
+        border: 1px solid rgba(234, 236, 240, 0.95);
+      }
+
+      .dropdown-user-avatar.show {
+        display: block;
+      }
+
+      .dropdown-user-fallback {
+        width: 44px;
+        height: 44px;
+        border-radius: 14px;
+        background: rgba(255, 90, 122, 0.15);
+        display: grid;
+        place-items: center;
+        font-weight: 900;
+        color: #b42318;
+      }
+
+      .dropdown-user-name {
+        font-weight: 900;
+        color: #101828;
+        font-size: 14px;
+      }
+
+      .dropdown-user-handle {
+        color: var(--muted);
+        font-size: 12px;
+        margin-top: 2px;
+      }
+
+      .app {
+        min-height: 100vh;
+        width: 100%;
+        margin: 0;
+        padding: 8px 16px 28px;
+        display: grid;
+        grid-template-columns: 320px minmax(0, 920px);
+        column-gap: 28px;
+        row-gap: 20px;
+        align-items: start;
+        justify-content: start;
+      }
+
+      .sidebar {
+        position: sticky;
+        top: 8px;
+        z-index: 5;
+        align-self: start;
+      }
+
+      .spacer {
+        display: none;
+      }
+
+      .card {
+        background: var(--card);
+        border: 1px solid rgba(234, 236, 240, 0.95);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        overflow: hidden;
+      }
+
+      .card.pad {
+        padding: 18px;
+      }
+
+      .sidebar .card {
+        width: clamp(280px, 24vw, 340px);
+        border-radius: 28px;
+        border: 1px solid rgba(255, 255, 255, 0.42);
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0.14));
+        -webkit-backdrop-filter: blur(14px) saturate(130%);
+        backdrop-filter: blur(14px) saturate(130%);
+        box-shadow:
+          0 18px 42px rgba(16, 24, 40, 0.18),
+          inset 0 1px 0 rgba(255, 255, 255, 0.45);
+      }
+
+      .cardTitle {
+        font-weight: 900;
+        font-size: 16px;
+        letter-spacing: 0.2px;
+        margin: 2px 4px 14px;
+      }
+
+      .meRow {
+        display: flex;
+        align-items: flex-start;
+        gap: 14px;
+        margin-bottom: 10px;
+      }
+
+      /* Keep IDs the same for account.js */
+      #avatarBox {
+        width: 112px;
+        height: 112px;
+        border-radius: 24px;
+        background: rgba(255, 255, 255, 0.18);
+        border: 1px solid rgba(255, 255, 255, 0.55);
+        display: grid;
+        place-items: center;
+        overflow: hidden;
+        cursor: pointer;
+        flex: 0 0 auto;
+        position: relative;
+        box-shadow: 0 12px 24px rgba(16, 24, 40, 0.16);
+        margin-left: 2px;
+      }
+
+      #avatarImg {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: none;
+      }
+
+      #avatarBox.has-photo #avatarImg {
+        display: block;
+      }
+
+      .phText {
+        color: rgba(16, 24, 40, 0.55);
+        font-weight: 800;
+        font-size: 11px;
+        letter-spacing: 0.2px;
+      }
+
+      .hint {
+        color: #4b5d73;
+        font-size: 12px;
+        margin: 8px 2px 0;
+      }
+
+      .btn {
+        width: 100%;
+        margin-top: 10px;
+        border: 1px solid rgba(234, 236, 240, 0.95);
+        background: #fff;
+        color: #1d2939;
+        font-weight: 800;
+        font-size: 12.5px;
+        padding: 9px 10px;
+        border-radius: 14px;
+        cursor: pointer;
+      }
+
+      .btn:hover {
+        background: #fbfcfe;
+      }
+
+      .btn:disabled {
+        opacity: 0.55;
+        cursor: not-allowed;
+      }
+
+      .uploadLocked {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      .main {
+        width: 100%;
+        max-width: 920px;
+        min-width: 0;
+        display: flex;
+        align-items: stretch;
+      }
+
+      #profileCard {
+        min-height: min(760px, calc(100vh - 48px));
+        width: 100%;
+        border-radius: 28px;
+        border: 1px solid rgba(255, 255, 255, 0.42);
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0.14));
+        -webkit-backdrop-filter: blur(14px) saturate(130%);
+        backdrop-filter: blur(14px) saturate(130%);
+        box-shadow:
+          0 18px 42px rgba(16, 24, 40, 0.18),
+          inset 0 1px 0 rgba(255, 255, 255, 0.45);
+      }
+
+      .topbar {
+        padding: 14px 16px 10px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .topbar .ttl {
+        font-weight: 800;
+        font-size: 16px;
+        letter-spacing: 0.2px;
+        color: #102a43;
+      }
+
+      .subttl {
+        color: #48627e;
+        font-size: 12px;
+        font-weight: 650;
+      }
+
+      .editBtn {
+        border: 1px solid rgba(234, 236, 240, 0.95);
+        background: #fff;
+        color: #1d2939;
+        font-weight: 800;
+        font-size: 12.5px;
+        padding: 8px 10px;
+        border-radius: 14px;
+        cursor: pointer;
+      }
+
+      .editBtn.primary {
+        border-color: rgba(255, 90, 122, 0.32);
+        background: rgba(255, 90, 122, 0.10);
+        color: #b42318;
+        transition: transform 0.15s ease, box-shadow 0.2s ease, background 0.2s ease;
+      }
+
+      .editBtn.primary:hover {
+        transform: translateY(-1px);
+        background: rgba(255, 90, 122, 0.16);
+        box-shadow: 0 8px 16px rgba(180, 35, 24, 0.14);
+      }
+
+      .editBtn.primary.is-saving {
+        background: rgba(255, 255, 255, 0.3);
+        color: #7a1d2e;
+      }
+
+      .editBtnWrap {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .divider {
+        height: 1px;
+        background: rgba(255, 255, 255, 0.42);
+      }
+
+      .gallery {
+        padding: 10px 16px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+
+      .thumbGrid {
+        margin-top: 12px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+
+      .thumbPhoto {
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        object-fit: cover;
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.2);
+        cursor: pointer;
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        box-shadow: 0 8px 16px rgba(16, 24, 40, 0.12);
+      }
+
+      .cell {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        align-items: stretch;
+      }
+
+      /* Keep IDs the same for account.js */
+      .bigPhoto {
+        width: 100%;
+        height: 320px;
+        object-fit: cover;
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.2);
+        cursor: pointer;
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        box-shadow: 0 10px 24px rgba(16, 24, 40, 0.08);
+      }
+
+      .label {
+        font-size: 12px;
+        color: var(--muted);
+        font-weight: 700;
+        padding-left: 2px;
+      }
+
+      .header {
+        padding: 14px 16px 10px;
+        display: flex;
+        gap: 16px;
+        align-items: center;
+      }
+
+      .avatar {
+        width: 62px;
+        height: 62px;
+        border-radius: 50%;
+        background: #ffe9ee;
+        border: 1px solid rgba(255, 90, 122, 0.28);
+        display: grid;
+        place-items: center;
+        overflow: hidden;
+        flex: 0 0 auto;
+      }
+
+      .avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        object-position: center;
+        display: none;
+      }
+
+      .avatar.has-photo img {
+        display: block;
+      }
+
+      .avatar svg {
+        width: 28px;
+        height: 28px;
+        color: #101828;
+        opacity: 0.9;
+      }
+
+      .nameLine {
+        min-width: 0;
+        flex: 1;
+      }
+
+      .nameLine .name {
+        font-weight: 700;
+        font-size: 18px;
+        letter-spacing: 0.2px;
+        display: flex;
+        gap: 4px;
+        align-items: baseline;
+        min-width: 0;
+      }
+
+      .nameInput,
+      .userInput {
+        border: none;
+        background: transparent;
+        outline: none;
+        font: inherit;
+        color: inherit;
+        padding: 0;
+        margin: 0;
+        min-width: 0;
+      }
+
+      .nameInput {
+        font-weight: 700;
+        font-size: 18px;
+        width: min(420px, 55vw);
+      }
+
+      .userInput {
+        font-weight: 700;
+        font-size: 18px;
+        width: min(200px, 30vw);
+      }
+
+      .subRow {
+        margin-top: 6px;
+        color: #4b5d73;
+        font-size: 12px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        align-items: center;
+      }
+
+      .subRow b {
+        color: #101828;
+        font-weight: 600;
+      }
+
+      .flag {
+        width: 22px;
+        height: 22px;
+        border-radius: 8px;
+        display: grid;
+        place-items: center;
+        border: 1px solid rgba(255, 255, 255, 0.46);
+        background: rgba(255, 255, 255, 0.2);
+        font-size: 12px;
+        box-shadow: 0 10px 24px rgba(16, 24, 40, 0.08);
+      }
+
+      .zodiacRow {
+        margin-top: 10px;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 6px 10px;
+        border-radius: 14px;
+        background: rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.46);
+        color: #3b536d;
+        font-weight: 650;
+        font-size: 12px;
+        box-shadow: 0 10px 24px rgba(16, 24, 40, 0.08);
+      }
+
+      .rows {
+        padding: 8px 16px 16px;
+        display: grid;
+        gap: 12px;
+      }
+
+      .row {
+        border-radius: 16px;
+        border: 1px solid rgba(255, 255, 255, 0.46);
+        background: rgba(255, 255, 255, 0.2);
+        padding: 8px 10px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        box-shadow: 0 10px 24px rgba(16, 24, 40, 0.08);
+      }
+
+      .row.disabled {
+        background: rgba(255, 255, 255, 0.16);
+      }
+
+      .row .l {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        min-width: 0;
+      }
+
+      .row .k {
+        color: #4b5d73;
+        font-size: 12px;
+      }
+
+      .row .v {
+        font-weight: 700;
+        font-size: 14px;
+        color: #101828;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .row .r {
+        flex: 0 0 auto;
+        display: grid;
+        place-items: center;
+        width: 34px;
+        height: 34px;
+        border-radius: 12px;
+      }
+
+      .row svg {
+        width: 18px;
+        height: 18px;
+        color: #3b536d;
+      }
+
+      .rowInput {
+        border: none;
+        background: transparent;
+        outline: none;
+        font: inherit;
+        color: inherit;
+        padding: 0;
+        margin: 0;
+        width: min(360px, 46vw);
+      }
+
+      .aboutRow {
+        border-radius: 16px;
+        border: 1px solid rgba(255, 255, 255, 0.46);
+        background: rgba(255, 255, 255, 0.2);
+        padding: 8px 10px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        box-shadow: 0 10px 24px rgba(16, 24, 40, 0.08);
+      }
+
+      .aboutRow .k {
+        color: #4b5d73;
+        font-size: 12px;
+      }
+
+      .aboutBox {
+        width: 100%;
+        min-height: 64px;
+        resize: none;
+        border: 1px solid rgba(255, 255, 255, 0.46);
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 14px;
+        padding: 8px;
+        font: inherit;
+        color: #101828;
+        line-height: 1.35;
+        outline: none;
+      }
+
+      .likeRow {
+        grid-column: 1 / -1;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+      }
+
+      .likeCount {
+        font-weight: 700;
+        color: #102a43;
+      }
+
+      .likeBtn {
+        border: 1px solid rgba(255, 255, 255, 0.48);
+        background: rgba(255, 255, 255, 0.28);
+        color: #8a2034;
+        font-size: 16px;
+        font-weight: 700;
+        border-radius: 999px;
+        padding: 8px 14px;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 6px 14px rgba(16, 24, 40, 0.1);
+      }
+
+      .dobInput {
+        border: none;
+        background: transparent;
+        outline: none;
+        font: inherit;
+        color: inherit;
+        padding: 0;
+        margin: 0;
+      }
+
+      .dobInput[disabled] {
+        color: #101828;
+        opacity: 1;
+        -webkit-text-fill-color: #101828;
+      }
+
+      .isEditing .nameInput,
+      .isEditing .userInput {
+        background: rgba(255, 90, 122, 0.10);
+        border-radius: 12px;
+        padding: 6px 10px;
+      }
+
+      .isEditing .rowInput,
+      .isEditing .aboutBox {
+        background: rgba(255, 90, 122, 0.08);
+        border-color: rgba(255, 90, 122, 0.25);
+      }
+
+      .isEditing .dobInput {
+        background: rgba(255, 90, 122, 0.10);
+        border-radius: 12px;
+        padding: 4px 8px;
+      }
+
+      @media (max-width: 940px) {
+        .app {
+          min-height: auto;
+          grid-template-columns: 1fr;
+          gap: 16px;
+          align-items: stretch;
+          padding-top: 8px;
+        }
+
+        .sidebar .card {
+          width: 100%;
+        }
+
+        .sidebar {
+          position: static;
+        }
+
+        .spacer {
+          display: none;
+        }
+
+        .gallery {
+          grid-template-columns: 1fr;
+        }
+
+        .bigPhoto {
+          height: 280px;
+        }
+
+        #profileCard {
+          min-height: auto;
+        }
+
+        .main {
+          max-width: none;
+        }
+      }
+
+      @media (max-width: 1100px) {
+        .app {
+          grid-template-columns: 290px minmax(0, 1fr);
+          column-gap: 22px;
+        }
+
+        #avatarBox {
+          width: 96px;
+          height: 96px;
+          border-radius: 20px;
+        }
+
+        .sidebar .card,
+        #profileCard {
+          border-radius: 24px;
+        }
+      }
+
+      @media (max-width: 700px) {
+        .topbar,
+        .header,
+        .rows,
+        .gallery {
+          padding-left: 12px;
+          padding-right: 12px;
+        }
+      }
+
+      @media (min-width: 720px) {
+        .rows {
+          grid-template-columns: 1fr 1fr;
+        }
+
+        .aboutRow {
+          grid-column: 1 / -1;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="app">
+      <aside class="sidebar">
+        <section class="card pad" aria-label="My Account">
+          <div class="cardTitle">My Account</div>
+
+          <div class="meRow">
+            <div id="avatarBox" title="Click to upload profile photo">
+              <img id="avatarImg" alt="Profile photo" />
+              <span class="phText">NO PHOTO</span>
+            </div>
+            <div style="min-width:0;">
+              <div style="font-weight:800; font-size:13px;">Profile Photo</div>
+              <div class="hint">Tap to upload</div>
+            </div>
+          </div>
+
+          <button class="btn" id="dpBtn" type="button">Upload Profile Photo</button>
+          <input type="file" id="dpInput" accept="image/*" hidden />
+
+          <div class="hint" style="margin-top:10px;">Gallery thumbnails</div>
+          <div class="thumbGrid" aria-label="Gallery upload thumbnails">
+            <div class="cell" style="gap:6px;">
+              <img id="accPhoto1" class="thumbPhoto" alt="Gallery photo 1" title="Click to upload gallery photo 1" />
+              <div class="label">Photo 1</div>
+              <input type="file" id="gallery1Input" accept="image/*" hidden />
+            </div>
+
+            <div class="cell" style="gap:6px;">
+              <img id="accPhoto2" class="thumbPhoto" alt="Gallery photo 2" title="Click to upload gallery photo 2" />
+              <div class="label">Photo 2</div>
+              <input type="file" id="gallery2Input" accept="image/*" hidden />
+            </div>
+          </div>
+        </section>
+      </aside>
+
+      <main class="main">
+        <section class="card" id="profileCard" aria-label="Profile">
+          <div class="topbar">
+            <div>
+              <div class="ttl">Edit Profile</div>
+              <div class="subttl">Gallery + profile details</div>
+            </div>
+
+            <div class="editBtnWrap">
+              <button class="editBtn" id="cancelBtn" type="button" style="display:none;">Cancel</button>
+              <button class="editBtn primary" id="editBtn" type="button">Edit Profile</button>
+            </div>
+          </div>
+          <div class="divider"></div>
+
+          <div class="header">
+            <div class="avatar" id="mainAvatar">
+              <img id="mainAvatarImg" alt="" />
+              <svg id="mainAvatarIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <circle cx="12" cy="8" r="4" />
+                <path d="M4 20c2-4 14-4 16 0" />
+              </svg>
+            </div>
+
+            <div class="nameLine">
+              <div class="name" aria-label="Name and username">
+                <input id="nameInput" class="nameInput" type="text" value="" readonly />
+                <input id="usernameInput" class="userInput" type="text" value="" readonly />
+              </div>
+
+              <div class="subRow">
+                <span>Gender:&nbsp; <b id="genderText">—</b></span>
+                <span>
+                  Birthday:&nbsp;
+                  <b id="dobText">—</b>
+                  <input id="dobInput" class="dobInput" type="date" value="" style="display:none;" disabled />
+                </span>
+                <span style="display:inline-flex;align-items:center;gap:10px;">
+                  <span class="flag" id="countryFlag" aria-hidden="true">🌍</span>
+                  <b id="countryText">—</b>
+                </span>
+              </div>
+
+              <div class="zodiacRow" aria-label="Zodiac">
+                <span id="zodiacText">Zodiac: —</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="rows">
+            <div class="row disabled">
+              <div class="l">
+                <div class="k">Religion</div>
+                <div class="v" id="religionText">—</div>
+              </div>
+              <div class="r" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M7 11V8a5 5 0 0 1 10 0v3" />
+                  <rect x="5" y="11" width="14" height="10" rx="2" />
+                </svg>
+              </div>
+            </div>
+
+            <div class="row disabled">
+              <div class="l">
+                <div class="k">Marital Status</div>
+                <div class="v" id="maritalText">—</div>
+              </div>
+              <div class="r" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M7 11V8a5 5 0 0 1 10 0v3" />
+                  <rect x="5" y="11" width="14" height="10" rx="2" />
+                </svg>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="l">
+                <div class="k">Company</div>
+                <input id="companyInput" class="rowInput v" type="text" value="" readonly />
+              </div>
+              <div class="r" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M9 18l6-6-6-6" />
+                </svg>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="l">
+                <div class="k">Job / Profession</div>
+                <input id="jobInput" class="rowInput v" type="text" value="" readonly />
+              </div>
+              <div class="r" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M9 18l6-6-6-6" />
+                </svg>
+              </div>
+            </div>
+
+            <div class="row disabled">
+              <div class="l">
+                <div class="k">Qualification</div>
+                <div class="v" id="qualificationText">—</div>
+              </div>
+              <div class="r" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M7 11V8a5 5 0 0 1 10 0v3" />
+                  <rect x="5" y="11" width="14" height="10" rx="2" />
+                </svg>
+              </div>
+            </div>
+
+            <div class="aboutRow">
+              <div class="k">Yourself</div>
+              <textarea id="yourselfText" class="aboutBox" readonly placeholder="Write something about yourself..."></textarea>
+            </div>
+
+            <div class="row likeRow">
+              <div class="l">
+                <div class="k">Popularity</div>
+                <div class="v"><span class="likeCount" id="likeCount">0</span> Likes</div>
+              </div>
+              <button class="likeBtn" id="likeBtn" type="button" aria-label="Like profile">💗 Like</button>
+            </div>
+          </div>
+        </section>
+      </main>
+
+    </div>
+
+    <script type="module" src="script.js/account.js"></script>
+  </body>
+</html>

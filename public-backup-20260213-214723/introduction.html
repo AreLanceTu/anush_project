@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vivah – Find Your Forever</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', Arial, sans-serif;
+    }
+
+    body, html {
+      height: 100%;
+    }
+
+    :root {
+      --text: #0f172a;
+      --muted: #475569;
+      --border: rgba(15, 23, 42, 0.10);
+      --card: #ffffff;
+      --accent: #00bcd4;
+      --accent-2: #e91e63;
+      --soft: #f8fafc;
+      --icon-bg: rgba(0, 188, 212, 0.12);
+    }
+
+    body {
+      color: var(--text);
+      background: #ffffff;
+    }
+
+    header {
+      width: 100%;
+      padding: 20px 50px;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      background: rgba(0,0,0,0.18); /* semi-transparent black */
+      position: fixed;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+     .navbar-logo {
+      font-size: 2.1rem;
+      font-family: 'Dancing Script', cursive, 'Poppins', Inter, Arial, sans-serif;
+      font-weight: 700;
+      color: #F6C177;
+      background: linear-gradient(90deg, #F6C177 20%, #FFF8E7 40%, #F6C177 60%);
+      background-size: 200% auto;
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: shine-logo 2.5s linear infinite;
+      letter-spacing: 0.04em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-shadow: 0 2px 8px rgba(220,53,69,0.08);
+    }
+
+    @keyframes shine-logo {
+      to { background-position: 200% center; }
+    }
+
+    header nav {
+      margin-left: auto;
+    }
+
+    header nav a {
+      margin-left: 20px;
+      text-decoration: none;
+      color: #e91e63; 
+      font-weight: 500;
+    }
+
+    .page-section {
+      padding: 72px 50px;
+      background: #ffffff;
+    }
+
+    .page-section.alt {
+      background: var(--soft);
+    }
+
+    .page-section {
+      scroll-margin-top: 110px;
+    }
+
+    .section-title {
+      font-size: 44px;
+      line-height: 1.1;
+      font-weight: 700;
+      margin-bottom: 28px;
+      letter-spacing: -0.02em;
+    }
+
+    .section-subtitle {
+      color: var(--muted);
+      max-width: 720px;
+      margin-top: -10px;
+      margin-bottom: 28px;
+      line-height: 1.7;
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 26px;
+    }
+
+    .feature-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 28px;
+      box-shadow: 0 1px 0 rgba(15, 23, 42, 0.02);
+    }
+
+    .feature-icon {
+      width: 68px;
+      height: 68px;
+      border-radius: 18px;
+      background: var(--icon-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 18px;
+      color: #0891b2;
+    }
+
+    .feature-card h3 {
+      font-size: 22px;
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+
+    .feature-card p {
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: 16px;
+    }
+
+    .stories-wrap {
+      display: grid;
+      grid-template-columns: 1.05fr 1fr;
+      gap: 34px;
+      align-items: start;
+    }
+
+    .story-cards {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .story-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 1px 0 rgba(15, 23, 42, 0.02);
+    }
+
+    .story-card .media {
+      height: 190px;
+      background: #e2e8f0;
+      display: grid;
+      place-items: center;
+    }
+
+    .story-card .media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .story-card .content {
+      padding: 16px 18px 18px;
+    }
+
+    .story-card .names {
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .story-card .quote {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .faq-list {
+      display: grid;
+      gap: 14px;
+      max-width: 980px;
+    }
+
+    .faq-item {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+
+    .faq-q {
+      width: 100%;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 14px;
+      padding: 18px 18px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      text-align: left;
+      font-weight: 600;
+      color: var(--text);
+      font-size: 16px;
+    }
+
+    .faq-num {
+      color: #64748b;
+      font-weight: 700;
+      width: 34px;
+      text-align: right;
+    }
+
+    .faq-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      display: grid;
+      place-items: center;
+      transition: transform 0.2s ease;
+      color: #0f172a;
+      user-select: none;
+    }
+
+    .faq-item[data-open="true"] .faq-icon {
+      transform: rotate(45deg);
+    }
+
+    .faq-a {
+      padding: 0 18px 18px 66px;
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: 15px;
+    }
+
+    .site-footer {
+      padding: 28px 50px;
+      background: #0b1220;
+      color: rgba(255, 255, 255, 0.78);
+    }
+
+    .site-footer .footer-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .site-footer a {
+      color: rgba(255, 255, 255, 0.78);
+      text-decoration: none;
+      margin-left: 14px;
+    }
+
+    .site-footer a:hover {
+      color: #ffffff;
+    }
+
+    .hero {
+      height: 100vh;
+      background: url("images/sem6matrimonialimg.png") center/cover no-repeat;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      text-align: center;
+      color: #fff;
+      padding-top: 80px;
+    }
+
+    .hero h1 {
+      font-size: 48px;
+      margin-bottom: 20px;
+    }
+
+    .hero p {
+      font-size: 20px;
+      margin-bottom: 30px;
+    }
+
+    .hero button {
+      background-color: #00bcd4;
+      color: #fff;
+      border: none;
+      padding: 15px 30px;
+      font-size: 18px;
+      cursor: pointer;
+      border-radius: 5px;
+      transition: 0.3s;
+    }
+
+    .hero button:hover {
+      background-color: #0097a7;
+    }
+
+    .ratings {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 20px;
+      gap: 30px;
+      font-size: 16px;
+      color: #fff;
+    }
+
+    .ratings span {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .ratings .stars {
+      color: gold;
+    }
+
+    /* Responsive */
+    @media(max-width: 768px){
+      .hero h1 {
+        font-size: 32px;
+      }
+      .hero p {
+        font-size: 16px;
+      }
+
+      .page-section {
+        padding: 56px 18px;
+      }
+
+      header {
+        padding: 16px 18px;
+      }
+
+      .feature-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .stories-wrap {
+        grid-template-columns: 1fr;
+      }
+
+      .story-cards {
+        grid-template-columns: 1fr;
+      }
+
+      .section-title {
+        font-size: 34px;
+      }
+    }
+
+    @media(max-width: 1024px){
+      .feature-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="navbar-logo">𝑽𝒊𝒗𝒂𝒉</div>
+    <nav>
+      <a href="#experience">About us</a>
+      <a href="#faq">Help</a>
+      <a href="login.html">Login</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+  <h1>Find your forever</h1>
+    <p>Discover a world beyond matrimony</p>
+    <a href="login.html"><button>Find Your Match</button></a>
+  </section>
+
+  <main>
+    <section class="page-section" id="experience">
+      <h2 class="section-title">The Vivah Experience</h2>
+      <p class="section-subtitle">Simple, safe, and meaningful matchmaking features designed to help you connect with confidence.</p>
+
+      <div class="feature-grid">
+        <article class="feature-card">
+          <div class="feature-icon" aria-hidden="true">
+            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Z" stroke="currentColor" stroke-width="1.8"/>
+              <path d="M8.2 12.2l2.3 2.4 5.3-5.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <h3>Verified Profiles</h3>
+          <p>Profiles go through checks so you can focus on genuine connections.</p>
+        </article>
+
+        <article class="feature-card">
+          <div class="feature-icon" aria-hidden="true">
+            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 3l8 4v6c0 5-3.4 8.6-8 9-4.6-.4-8-4-8-9V7l8-4Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+              <path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <h3>Privacy First</h3>
+          <p>Control what you share and when—your comfort comes first.</p>
+        </article>
+
+        <article class="feature-card">
+          <div class="feature-icon" aria-hidden="true">
+            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M4 18V6a2 2 0 0 1 2-2h6l8 8v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+              <path d="M14 4v6h6" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+              <path d="M8 13h8M8 16h6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <h3>Smart Recommendations</h3>
+          <p>Discover matches based on your preferences and profile compatibility.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="page-section alt" id="stories">
+      <div class="stories-wrap">
+        <div>
+          <h2 class="section-title">Real Stories, True Connections</h2>
+          <p class="section-subtitle">See how people found meaningful relationships through Vivah. Your success story could be next.</p>
+        </div>
+
+        <div class="story-cards" aria-label="Success stories">
+          <article class="story-card">
+            <div class="media">
+              <img src="images/foterimageforvivha.jpeg" alt="Profile story" loading="lazy" />
+            </div>
+            <div class="content"><br>
+              <div class="names">Aarav &amp; Isha</div>
+              <div class="quote">“We connected over shared family values and started our journey with confidence.”</div>
+            </div>
+          </article>
+
+          <article class="story-card">
+            <div class="media">
+              <img src="images/fotterimage2forvivha.jpg" alt="Profile story" loading="lazy" />
+            </div>
+            <div class="content"><br>
+              <div class="names">Rohan &amp; Meera</div>
+              <div class="quote">“The recommendations were surprisingly accurate—our first chat felt effortless.”</div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="page-section" id="faq">
+      <h2 class="section-title">Frequently Asked Questions</h2>
+      <div class="faq-list" role="list">
+        <div class="faq-item" data-open="false">
+          <button class="faq-q" type="button" aria-expanded="false">
+            <span class="faq-num">01</span>
+            <span>Why is Vivah better compared to other matrimonial websites?</span>
+            <span class="faq-icon" aria-hidden="true">+</span>
+          </button>
+          <div class="faq-a" hidden>
+            Vivah focuses on verified profiles, privacy-first controls, and meaningful recommendations to make matching simpler and safer.
+          </div>
+        </div>
+
+        <div class="faq-item" data-open="false">
+          <button class="faq-q" type="button" aria-expanded="false">
+            <span class="faq-num">02</span>
+            <span>Is Vivah a trustworthy matchmaking platform?</span>
+            <span class="faq-icon" aria-hidden="true">+</span>
+          </button>
+          <div class="faq-a" hidden>
+            Yes—privacy tools and profile checks help reduce fake profiles and give you more control over your experience.
+          </div>
+        </div>
+
+        <div class="faq-item" data-open="false">
+          <button class="faq-q" type="button" aria-expanded="false">
+            <span class="faq-num">03</span>
+            <span>What is the difference between free membership vs paid membership?</span>
+            <span class="faq-icon" aria-hidden="true">+</span>
+          </button>
+          <div class="faq-a" hidden>
+            Free membership helps you explore and shortlist. Paid plans typically unlock more messaging and premium visibility features.
+          </div>
+        </div>
+
+        <div class="faq-item" data-open="false">
+          <button class="faq-q" type="button" aria-expanded="false">
+            <span class="faq-num">04</span>
+            <span>What additional benefits do I get as a Premium Member?</span>
+            <span class="faq-icon" aria-hidden="true">+</span>
+          </button>
+          <div class="faq-a" hidden>
+            Premium membership can include priority visibility, advanced filters, and more ways to reach out to matches.
+          </div>
+        </div>
+
+        <div class="faq-item" data-open="false">
+          <button class="faq-q" type="button" aria-expanded="false">
+            <span class="faq-num">05</span>
+            <span>How can I contact other members on Vivah?</span>
+            <span class="faq-icon" aria-hidden="true">+</span>
+          </button>
+          <div class="faq-a" hidden>
+            Use the Connect/Request features on profiles, and once accepted you can message securely from your account.
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-row">
+      <div>© <span id="year"></span> Vivah. All rights reserved.</div>
+      <div>
+        <a href="#experience">About</a>
+        <a href="#faq">FAQ</a>
+        <a href="login.html">Login</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      var yearEl = document.getElementById('year');
+      if (yearEl) yearEl.textContent = String(new Date().getFullYear());
+
+      var items = document.querySelectorAll('.faq-item');
+      items.forEach(function (item) {
+        var btn = item.querySelector('.faq-q');
+        var ans = item.querySelector('.faq-a');
+        if (!btn || !ans) return;
+
+        btn.addEventListener('click', function () {
+          var isOpen = item.getAttribute('data-open') === 'true';
+          item.setAttribute('data-open', isOpen ? 'false' : 'true');
+          btn.setAttribute('aria-expanded', isOpen ? 'false' : 'true');
+          ans.hidden = isOpen;
+        });
+      });
+    })();
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,1597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Matches – Vivah</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+  <style>
+            /* Twitter-style Profile Dropdown */
+            .dropdown {
+              position: relative;
+              display: inline-block;
+            }
+            .dropdown-toggle {
+              background: transparent;
+              border: none;
+              cursor: pointer;
+              padding: 4px;
+              border-radius: 999px;
+              display: inline-flex;
+              align-items: center;
+              justify-content: center;
+              transition: background 0.18s;
+            }
+            .dropdown-toggle:hover,
+            .dropdown-toggle:focus {
+              outline: none;
+              background: rgba(255, 229, 236, 0.75);
+            }
+            .dropdown-menu {
+              position: absolute;
+              right: 0;
+              top: calc(100% + 10px);
+              width: 280px;
+              max-width: 92vw;
+              background: #ffffff;
+              border-radius: 16px;
+              box-shadow: 0 18px 60px rgba(0,0,0,0.18);
+              padding: 10px;
+              z-index: 2000;
+              opacity: 0;
+              transform: translateY(-6px);
+              pointer-events: none;
+              visibility: hidden;
+              transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s;
+            }
+            .dropdown.open .dropdown-menu,
+            .dropdown:hover .dropdown-menu,
+            .dropdown:focus-within .dropdown-menu {
+              opacity: 1;
+              transform: translateY(0);
+              pointer-events: auto;
+              visibility: visible;
+            }
+
+            .navbar-profile-avatar {
+              width: 38px;
+              height: 38px;
+              border-radius: 50%;
+              overflow: hidden;
+              border: 2px solid #f8bbd0;
+              box-shadow: 0 2px 8px rgba(220,53,69,0.08);
+              background: linear-gradient(135deg, #ffe5ec, #f6c177);
+              display: inline-flex;
+              align-items: center;
+              justify-content: center;
+              position: relative;
+              flex: 0 0 auto;
+            }
+            .navbar-profile-avatar img {
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
+              display: none;
+            }
+            .navbar-profile-avatar span {
+              font-weight: 700;
+              font-size: 0.78rem;
+              color: #62182b;
+              letter-spacing: 0.02em;
+              padding: 0 6px;
+              line-height: 1;
+              max-width: 100%;
+              text-overflow: ellipsis;
+              overflow: hidden;
+              white-space: nowrap;
+            }
+            .navbar-profile-avatar.has-photo img { display: block; }
+            .navbar-profile-avatar.has-photo span { display: none; }
+
+            .dropdown-user {
+              display: flex;
+              gap: 12px;
+              align-items: center;
+              padding: 10px;
+              border-radius: 14px;
+            }
+            .dropdown-user-avatar {
+              width: 44px;
+              height: 44px;
+              border-radius: 50%;
+              object-fit: cover;
+              background: #f3f4f6;
+              border: 1px solid rgba(0,0,0,0.06);
+              flex: 0 0 auto;
+              display: none;
+            }
+            .dropdown-user-avatar.show { display: block; }
+            .dropdown-user-fallback {
+              width: 44px;
+              height: 44px;
+              border-radius: 50%;
+              display: inline-flex;
+              align-items: center;
+              justify-content: center;
+              font-weight: 700;
+              color: #62182b;
+              background: linear-gradient(135deg, #ffe5ec, #f6c177);
+              border: 1px solid rgba(0,0,0,0.06);
+              flex: 0 0 auto;
+            }
+            .dropdown-user-name {
+              font-weight: 700;
+              color: #0f1419;
+              line-height: 1.15;
+              font-size: 1.02rem;
+            }
+            .dropdown-user-handle {
+              color: #536471;
+              font-size: 0.95rem;
+              line-height: 1.15;
+	      margin-top: 2px;
+	      word-break: break-word;
+            }
+
+            .dropdown-divider {
+              height: 1px;
+              background: rgba(0,0,0,0.08);
+              margin: 8px 6px;
+            }
+            .dropdown-menu-item {
+              display: flex;
+              align-items: center;
+              gap: 12px;
+              padding: 12px 12px;
+              font-family: 'Poppins', Inter, Arial, sans-serif;
+              font-size: 1.02rem;
+              color: #0f1419;
+              font-weight: 600;
+              background: none;
+              border: none;
+              width: 100%;
+              text-align: left;
+              border-radius: 12px;
+              cursor: pointer;
+              transition: background 0.15s ease;
+            }
+            .dropdown-menu-item:hover,
+            .dropdown-menu-item:focus {
+              background: #f2f2f2;
+              outline: none;
+            }
+            .dropdown-menu-item i {
+              font-size: 1.05em;
+              color: #0f1419;
+              min-width: 20px;
+              text-align: center;
+              opacity: 0.9;
+            }
+
+            @media (max-width: 600px) {
+              .dropdown-menu { width: 92vw; }
+            }
+        .glass {
+          background: #FAF7F6 !important;
+          border: 1.5px solid #FFEDEE !important;
+          box-shadow: 0 6px 32px 0 rgba(255, 182, 193, 0.13), 0 1.5px 6px 0 rgba(255, 182, 193, 0.07) !important;
+          backdrop-filter: blur(16px) saturate(160%) !important;
+          -webkit-backdrop-filter: blur(16px) saturate(160%) !important;
+        }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      height: 100%; min-height: 100%;
+      font-family: 'Poppins', Inter, Arial, sans-serif;
+      background: #62182b;
+      color: #222;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      background: none;
+      min-height: 100vh;
+    }
+
+    /* Navbar */
+    .navbar {
+      width: 100%;
+      background: none;
+      box-shadow: none;
+      /* No blur, no transparency, just solid */
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 4px 18px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 1000;
+      backdrop-filter: none;
+    }
+    .navbar-logo {
+      font-size: 2.1rem;
+      font-family: 'Dancing Script', cursive, 'Poppins', Inter, Arial, sans-serif;
+      font-weight: 700;
+      color: #F6C177;
+      background: linear-gradient(90deg, #F6C177 20%, #FFF8E7 40%, #F6C177 60%);
+      background-size: 200% auto;
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: shine-logo 2.5s linear infinite;
+      letter-spacing: 0.04em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+
+
+      text-shadow: 0 2px 8px rgba(220,53,69,0.08);
+    }
+    .navbar-search {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0 32px;
+    }
+    .navbar-search input {
+      width: 320px;
+      max-width: 90vw;
+      padding: 10px 18px;
+      border-radius: 24px;
+      border: 1.5px solid #f8bbd0;
+      background: #fff;
+      font-size: 1rem;
+      outline: none;
+      transition: border 0.2s;
+      box-shadow: 0 2px 8px rgba(220,53,69,0.04);
+    }
+    .navbar-search input:focus {
+      border: 1.5px solid #e63946;
+    }
+    .navbar-profile {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      position: relative;
+    }
+
+    .navbar-heart {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .navbar-heart-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 999px;
+      border: none;
+      background: transparent;
+      color: #FFF8E7;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: color 0.18s ease;
+    }
+    .navbar-heart-btn:hover { background: transparent; }
+    .navbar-heart-btn:focus { outline: 2px solid rgba(246, 193, 119, 0.7); outline-offset: 3px; }
+    .navbar-heart-btn i {
+      font-size: 1.25rem;
+      line-height: 1;
+    }
+
+    .navbar-heart-badge {
+      position: absolute;
+      top: -3px;
+      right: -3px;
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: #ff0033;
+      color: transparent;
+      font-size: 0;
+      font-weight: 800;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid #62182b;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.22);
+    }
+
+    .heart-menu {
+      position: absolute;
+      left: 50%;
+      right: auto;
+      top: calc(100% + 10px);
+      width: auto;
+      min-width: 96px;
+      max-width: 92vw;
+      background: #ff0033;
+      border-radius: 14px;
+      box-shadow: 0 18px 60px rgba(0,0,0,0.25);
+      padding: 0;
+      overflow: hidden;
+      z-index: 2000;
+      opacity: 0;
+      transform: translateX(-50%) translateY(-6px);
+      pointer-events: none;
+      visibility: hidden;
+      transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s;
+    }
+    .navbar-heart.open .heart-menu {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+      pointer-events: auto;
+      visibility: visible;
+    }
+    .heart-menu::before {
+      content: '';
+      position: absolute;
+      left: 50%;
+      right: auto;
+      top: -8px;
+      width: 0;
+      height: 0;
+      border-left: 8px solid transparent;
+      border-right: 8px solid transparent;
+      border-bottom: 8px solid #ff0033;
+      transform: translateX(-50%);
+    }
+    .heart-like-row {
+      width: 100%;
+      border: none;
+      background: transparent;
+      color: #fff;
+      padding: 12px 16px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-weight: 900;
+      letter-spacing: 0.01em;
+    }
+    .heart-like-row:hover { background: transparent; }
+    .heart-like-row i { font-size: 1.1rem; }
+    .heart-like-row span { font-size: 1.12rem; }
+
+    .like-toast {
+      position: fixed;
+      left: 50%;
+      top: 70px;
+      transform: translateX(-50%) translateY(-10px);
+      background: rgba(15, 20, 25, 0.95);
+      color: #fff;
+      padding: 12px 14px;
+      border-radius: 14px;
+      box-shadow: 0 18px 50px rgba(0,0,0,0.35);
+      z-index: 5000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.18s ease, transform 0.18s ease;
+      max-width: 92vw;
+      font-weight: 600;
+    }
+    .like-toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+    .navbar-profile-img {
+      width: 38px; height: 38px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #f8bbd0;
+      box-shadow: 0 2px 8px rgba(220,53,69,0.08);
+    }
+    .navbar-profile-menu {
+      font-size: 1.2rem;
+      color: #e63946;
+      cursor: pointer;
+      padding: 6px 10px;
+      border-radius: 8px;
+      transition: background 0.18s;
+    }
+    .navbar-profile-menu:hover {
+      background: #ffe5ec;
+    }
+
+    /* Main container */
+    .container {
+      max-width: 1280px;
+      margin: 64px auto 0 auto;
+      padding: 0 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    /* Card grid */
+    .matches-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 32px;
+      justify-content: center;
+      align-items: stretch;
+      margin-top: 0;
+    }
+
+    /* Card styles */
+    .card {
+      background: #FAF7F6;
+      border-radius: 20px;
+      box-shadow: 0 4px 24px 0 rgba(255, 182, 193, 0.13), 0 1.5px 6px 0 rgba(255, 182, 193, 0.07);
+      padding: 36px 28px 28px 28px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 22px;
+      min-height: 390px;
+      border: 1.5px solid #FFEDEE;
+      transition: box-shadow 0.22s, transform 0.22s, border 0.18s;
+      position: relative;
+      margin-bottom: 8px;
+    }
+    .card:hover {
+      box-shadow: 0 12px 40px 0 rgba(50, 50, 50, 0.18), 0 2px 16px 0 rgba(255, 182, 193, 0.13);
+      transform: translateY(-8px) scale(1.025);
+      border: 1.5px solid #f8bbd0;
+    }
+    .card-head {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+    }
+    .avatar {
+      width: 92px; height: 92px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 3px solid #FFEDEE;
+      box-shadow: 0 2px 12px rgba(255, 182, 193, 0.13);
+      background: #FFF3F5;
+      margin-bottom: 10px;
+    }
+    .avatar img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+    }
+    .name {
+      font-weight: 700;
+      font-size: 1.22rem;
+      color: #62182b;
+      letter-spacing: 0.01em;
+      text-align: center;
+    }
+    .meta {
+      color: #c2185b;
+      font-size: 1.02rem;
+      font-weight: 500;
+      margin-left: 2px;
+    }
+    .location {
+      font-size: 0.98rem;
+      color: #ad1457;
+      margin-top: 2px;
+      text-align: center;
+    }
+    .profession {
+      font-weight: 600;
+      color: #c2185b;
+      font-size: 1.01rem;
+      text-align: center;
+    }
+    .verified-tick {
+      margin-left: 8px;
+      color: #1d9bf0;
+      font-size: 1.05em;
+      vertical-align: -1px;
+      filter: drop-shadow(0 2px 6px rgba(29, 155, 240, 0.35));
+    }
+    .bio {
+      color: #33343A;
+      font-size: 1.04rem;
+      line-height: 1.7;
+      margin-top: 10px;
+      text-align: center;
+      min-height: 48px;
+      letter-spacing: 0.01em;
+    }
+    .actions {
+      display: flex;
+      gap: 18px;
+      margin-top: 18px;
+      width: 100%;
+      justify-content: center;
+    }
+    .btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 32px;
+      border-radius: 999px;
+      font-family: 'Poppins', Inter, Arial, sans-serif;
+      font-weight: 500;
+      font-size: 1.05rem;
+      cursor: pointer;
+      outline: none;
+      transition: background 0.22s, color 0.22s, box-shadow 0.22s, transform 0.22s;
+      box-shadow: 0 2px 12px rgba(255, 182, 193, 0.10);
+      border: none;
+      position: relative;
+      overflow: hidden;
+    }
+    .btn-like {
+      background: linear-gradient(90deg, #FFF3F5 0%, #FFEDEE 100%);
+      color: #c2185b;
+      border: 1.5px solid #f8bbd0;
+      box-shadow: 0 2px 12px #ffe5ec80;
+    }
+    .btn-like:hover {
+      background: linear-gradient(90deg, #FFEDEE 0%, #FFF3F5 100%);
+      color: #e63946;
+      box-shadow: 0 8px 24px #ffe5ecb0;
+      transform: scale(1.06);
+    }
+    .btn-like.liked {
+      background: #ffe5ec;
+      color: #e63946;
+      box-shadow: 0 8px 24px #ffe5ecb0;
+    }
+    .btn-connect {
+      background: #FFF3F5;
+      color: #c2185b;
+      border: 1.5px solid #f8bbd0;
+      box-shadow: 0 2px 12px #ffe5ec80;
+    }
+    .btn-connect:hover {
+      background: #FFEDEE;
+      color: #e63946;
+      box-shadow: 0 8px 24px #ffe5ecb0;
+      transform: scale(1.06);
+    }
+    .btn-connect.requested {
+      background: #FFEDEE;
+      color: #ad1457;
+      border: 1.5px solid #ad1457;
+    }
+    .btn svg {
+      width: 1.2em; height: 1.2em;
+      vertical-align: middle;
+      margin-right: 6px;
+      transition: transform 0.22s;
+    }
+    .btn-like.liked svg {
+      animation: heart-pop 0.4s;
+      transform: scale(1.3);
+    }
+    @keyframes heart-pop {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.5); }
+      100% { transform: scale(1.3); }
+    }
+    .btn:active::after {
+      content: '';
+      position: absolute;
+      left: 50%; top: 50%;
+      width: 120%; height: 120%;
+      background: rgba(255, 182, 193, 0.13);
+      border-radius: 999px;
+      transform: translate(-50%, -50%) scale(0);
+      animation: ripple 0.5s;
+      z-index: 1;
+    }
+    @keyframes ripple {
+      0% { transform: translate(-50%, -50%) scale(0); opacity: 0.6; }
+      80% { transform: translate(-50%, -50%) scale(1.1); opacity: 0.2; }
+      100% { transform: translate(-50%, -50%) scale(1.2); opacity: 0; }
+    }
+    .btn span {
+      position: relative;
+      z-index: 2;
+    }
+    /* Card text color for contrast */
+    .card, .card * {
+      color: #22232A;
+    }
+    .card .name, .card .profession, .card .meta, .card .location {
+      color: #62182b;
+    }
+    .card .bio {
+      color: #33343A;
+    }
+    /* Subtle border for premium feel */
+    .card {
+      border: 1.5px solid #FFEDEE;
+    }
+    /* Extra whitespace for premium look */
+    .card {
+      padding-top: 36px;
+      padding-bottom: 28px;
+    }
+    /* Minimal gradients, soft look */
+    .card, .btn, .btn-like, .btn-connect {
+      background-image: none !important;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 900px) {
+      .container { padding: 0 8px; }
+      .matches-grid { gap: 18px; }
+      .card { padding: 18px 8px 16px 8px; }
+    }
+    @media (max-width: 600px) {
+      .navbar { flex-direction: column; gap: 10px; padding: 12px 6px; }
+      .navbar-search { margin: 10px 0; }
+      .container { margin-top: 16px; gap: 18px; }
+      .matches-grid { gap: 10px; }
+      .card { min-height: 320px; }
+      .avatar { width: 68px; height: 68px; }
+    }
+  </style>
+</head>
+<body>
+  <!-- <canvas id="particle-canvas"></canvas> -->
+
+  <!-- Premium Navbar -->
+  <nav class="navbar">
+    <div class="navbar-logo">
+      Vivah
+    </div>
+    <div class="navbar-profile">
+      <div class="navbar-heart" id="navbarHeart">
+        <button class="navbar-heart-btn" id="navbarHeartBtn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Notifications">
+          <i class="fa-regular fa-heart" aria-hidden="true"></i>
+        </button>
+        <span class="navbar-heart-badge" id="navbarHeartBadge" style="display:none;">1</span>
+
+        <div class="heart-menu" id="navbarHeartMenu" role="menu" aria-label="Notifications">
+          <button class="heart-like-row" type="button" id="heartLikes" aria-label="Profile likes">
+            <i class="fa-solid fa-heart" aria-hidden="true"></i>
+            <span id="heartLikesCount">0</span>
+          </button>
+        </div>
+      </div>
+      <div class="dropdown" id="profileDropdown">
+        <button class="dropdown-toggle" id="dropdownToggle" aria-haspopup="true" aria-expanded="false" aria-label="Open profile menu">
+          <div class="navbar-profile-avatar" id="navbarProfileAvatar" aria-hidden="true">
+            <img id="navbarProfileImg" alt="" />
+            <span id="navbarProfileText">U</span>
+          </div>
+        </button>
+        <div class="dropdown-menu" id="dropdownMenu" aria-labelledby="dropdownToggle">
+          <div class="dropdown-user" id="menuUser" role="presentation">
+            <img class="dropdown-user-avatar" id="menuUserAvatar" alt="Your profile photo" />
+            <div class="dropdown-user-fallback" id="menuUserFallback" aria-hidden="true">U</div>
+            <div>
+              <div class="dropdown-user-name" id="menuDisplayName">User</div>
+              <div class="dropdown-user-handle" id="menuHandle">@user</div>
+            </div>
+          </div>
+
+          <div class="dropdown-divider" role="presentation"></div>
+
+          <button class="dropdown-menu-item" id="menuMyProfile"><i class="fa fa-user"></i> Profile</button>
+          <button class="dropdown-menu-item" id="menuMessages"><i class="fa-regular fa-comment"></i> Comments</button>
+          <button class="dropdown-menu-item" id="menuChat"><i class="fa-solid fa-comments"></i> Chat</button>
+          <button class="dropdown-menu-item" id="menuHelp"><i class="fa fa-circle-question"></i> Help &amp; Support</button>
+          <button class="dropdown-menu-item" id="menuLogout"><i class="fa fa-arrow-right-from-bracket"></i> Logout</button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container">
+    <section class="matches-grid">
+      <article class="card left glass">
+        <div class="card-head">
+          <div class="avatar"><img src="Boysimage/pinterest1.jpeg" alt="User"></div>
+          <div>
+            <div class="name">Aarav Sharma <span class="meta">• 24</span></div>
+            <div class="location">Mumbai</div>
+            <div class="profession">Software Engineer</div>
+          </div>
+        </div> 
+        <p class="bio">Enjoys weekend drives, fitness, and street photography.</p>
+        <div class="actions">
+          <button class="btn btn-like">Like</button>
+          <button class="btn btn-connect"> Connect</button>
+        </div>
+      </article>
+
+      <article class="card featured glass">
+        <div class="card-head">
+          <div class="avatar"><img src="Boysimage/pinterest1.jpeg" alt="Anjali"></div>
+          <div>
+            <div class="name">Vivaan Verma <span class="meta">• 23</span></div>
+            <div class="location">Delhi</div>
+            <div class="profession">Doctor</div>
+          </div>
+        </div>
+        <p class="bio">Calm and family-oriented. Loves reading, gym, and volunteering.</p>
+        <div class="actions">
+          <button class="btn btn-like"> Like</button>
+          <button class="btn btn-connect"> Connect</button>
+        </div>
+      </article>
+
+      <article class="card right glass">
+        <div class="card-head">
+          <div class="avatar"><img src="Boysimage/pinterest1.jpeg" alt="Neha"></div>
+          <div>
+            <div class="name">Kabir Singh <span class="meta">• 30</span></div>
+            <div class="location">Bengaluru</div>
+            <div class="profession">Marketing Manager</div>
+          </div>
+        </div>
+        <p class="bio">Foodie and traveler. Enjoys trekking and discovering new cafés.</p>
+        <div class="actions">
+          <button class="btn btn-like">Like</button>
+          <button class="btn btn-connect">Connect</button>
+        </div>
+      </article>
+  <article class="card glass">
+    <div class="card-head">
+      <div class="avatar"><img src="Boysimage/pinterest1.jpeg" alt="Aisha"></div>
+      <div>
+        <div class="name">Arjun Nair <span class="meta">• 26</span></div>
+        <div class="location">Kochi</div>
+        <div class="profession">Data Analyst</div>
+      </div>
+    </div>
+    <p class="bio">Likes music, badminton, and beach walks. Loves simple weekends.</p>
+    <div class="actions">
+      <button class="btn btn-like">Like</button>
+      <button class="btn btn-connect">Connect</button>
+    </div>
+  </article>
+
+  <article class="card glass">
+    <div class="card-head">
+      <div class="avatar"><img src="Boysimage/pinterest1.jpeg" alt="Simran"></div>
+      <div>
+        <div class="name">Ishaan Gupta <span class="meta">• 27</span></div>
+        <div class="location">Hyderabad</div>
+        <div class="profession">HR Manager</div>
+      </div>
+    </div>
+    <p class="bio">People person. Enjoys books, yoga, and evening walks.</p>
+    <div class="actions">
+      <button class="btn btn-like">Like</button>
+      <button class="btn btn-connect">Connect</button>
+    </div>
+  </article>
+
+  <article class="card glass">
+    <div class="card-head">
+      <div class="avatar"><img src="Boysimage/pinterest1.jpeg" alt="Riya"></div>
+      <div>
+        <div class="name">Rohan Mehta <span class="meta">• 22</span></div>
+        <div class="location">Pune</div>
+        <div class="profession">Graphic Designer</div>
+      </div>
+    </div>
+    <p class="bio">Creative and curious. Loves sketching, indie music, and coffee.</p>
+    <div class="actions">
+      <button class="btn btn-like">Like</button>
+      <button class="btn btn-connect">Connect</button>
+    </div>
+  </article>
+
+  <article class="card glass">
+    <div class="card-head">
+      <div class="avatar"><img src="Boysimage/pinterest1.jpeg" alt="Meera"></div>
+      <div>
+        <div class="name">Aditya Joshi <span class="meta">• 28</span></div>
+        <div class="location">Ahmedabad</div>
+        <div class="profession">Chartered Accountant</div>
+      </div>
+    </div>
+    <p class="bio">Enjoys cricket, finance podcasts, and travel with family.</p>
+    <div class="actions">
+      <button class="btn btn-like">Like</button>
+      <button class="btn btn-connect">Connect</button>
+    </div>
+  </article>
+
+  <article class="card glass">
+    <div class="card-head">
+      <div class="avatar"><img src="Boysimage/pinterest1.jpeg" alt="Sneha"></div>
+      <div>
+        <div class="name">Siddharth Kapoor <span class="meta">• 24</span></div>
+        <div class="location">Jaipur</div>
+        <div class="profession">Architect</div>
+      </div>
+    </div>
+    <p class="bio">Loves design, heritage walks, and architectural photography.</p>
+    <div class="actions">
+      <button class="btn btn-like">Like</button>
+      <button class="btn btn-connect">Connect</button>
+    </div>
+  </article>
+
+  <article class="card glass">
+    <div class="card-head">
+      <div class="avatar"><img src="Boysimage/pinterest1.jpeg" alt="Pooja"></div>
+      <div>
+        <div class="name">Pranav Reddy <span class="meta">• 30</span></div>
+        <div class="location">Vijayawada</div>
+        <div class="profession">Pharmacist</div>
+      </div>
+    </div>
+    <p class="bio">Enjoys cooking, badminton, and movies. Loves road trips.</p>
+    <div class="actions">
+      <button class="btn btn-like">Like</button>
+      <button class="btn btn-connect">Connect</button>
+    </div>
+  </article>
+
+  <article class="card glass">
+    <div class="card-head">
+      <div class="avatar"><img src="Boysimage/pinterest1.jpeg" alt="Tanya"></div>
+      <div>
+        <div class="name">Kunal Desai <span class="meta">• 23</span></div>
+        <div class="location">Surat</div>
+        <div class="profession">Interior Designer</div>
+      </div>
+    </div>
+    <p class="bio">Into décor, films, and café hopping. Likes trying new recipes.</p>
+    <div class="actions">
+      <button class="btn btn-like">Like</button>
+      <button class="btn btn-connect">Connect</button>
+    </div>
+  </article>
+
+  <article class="card">
+    <div class="card-head">
+      <div class="avatar"><img src="Boysimage/pinterest1.jpeg" alt="Nisha"></div>
+      <div>
+        <div class="name">Nikhil Kumar <span class="meta">• 29</span></div>
+        <div class="location">Lucknow</div>
+        <div class="profession">Content Writer</div>
+      </div>
+    </div>
+    <p class="bio">Avid reader and foodie. Loves poetry and weekend getaways.</p>
+    <div class="actions">
+      <button class="btn btn-like">Like</button>
+      <button class="btn btn-connect">Connect</button>
+    </div>
+  </article>
+
+  <article class="card">
+    <div class="card-head">
+      <div class="avatar"><img src="Boysimage/pinterest1.jpeg" alt="Divya"></div>
+      <div>
+        <div class="name">Saurabh Mishra <span class="meta">• 26</span></div>
+        <div class="location">Bhopal</div>
+        <div class="profession">Civil Engineer</div>
+      </div>
+    </div>
+    <p class="bio">Enjoys cricket, trekking, and long road trips.</p>
+    <div class="actions">
+      <button class="btn btn-like">Like</button>
+      <button class="btn btn-connect">Connect</button>
+    </div>
+  </article>
+
+  <article class="card">
+    <div class="card-head">
+      <div class="avatar"><img src="Boysimage/pinterest1.jpeg" alt="Kavya"></div>
+      <div>
+        <div class="name">Farhan Khan <span class="meta">• 24</span></div>
+        <div class="location">Kolkata</div>
+        <div class="profession">Journalist</div>
+      </div>
+    </div>
+    <p class="bio">Storyteller at heart. Enjoys documentaries and photo-walks.</p>
+    <div class="actions">
+      <button class="btn btn-like">Like</button>
+      <button class="btn btn-connect">Connect</button>
+    </div>
+  </article>
+    <article class="card">
+      <div class="card-head">
+        <div class="avatar"><img src="Boysimage/pinterest1.jpeg" alt="Ishita"></div>
+        <div>
+          <div class="name">Rahul Iyer <span class="meta">• 30</span></div>
+          <div class="location">Chennai</div>
+          <div class="profession">Product Manager</div>
+        </div>
+      </div>
+      <p class="bio">Tech + travel. Loves cycling, startups, and good coffee.</p>
+      <div class="actions">
+        <button class="btn btn-like">Like</button>
+        <button class="btn btn-connect">Connect</button>
+      </div>
+    </article>
+    <article class="card">
+      <div class="card-head">
+        <div class="avatar"><img src="Boysimage/pinterest1.jpeg" alt="Radhika"></div>
+        <div>
+          <div class="name">Vijay Malhotra <span class="meta">• 27</span></div>
+          <div class="location">Gurgaon</div>
+          <div class="profession">Business Analyst</div>
+        </div>
+      </div>
+      <p class="bio">Enjoys analytics, gym, and weekend cricket matches.</p>
+      <div class="actions">
+        <button class="btn btn-like">Like</button>
+        <button class="btn btn-connect">Connect</button>
+      </div>
+    </article>
+    <article class="card">
+      <div class="card-head">
+        <div class="avatar"><img src="Boysimage/pinterest1.jpeg" alt="Sanya"></div>
+        <div>
+          <div class="name">Ankit Chatterjee <span class="meta">• 23</span></div>
+          <div class="location">Kolkata</div>
+          <div class="profession">UX Designer</div>
+        </div>
+      </div>
+      <p class="bio">Design-minded. Loves music, reading, and long walks.</p>
+      <div class="actions">
+        <button class="btn btn-like">Like</button>
+        <button class="btn btn-connect">Connect</button>
+      </div>
+    </article>
+    <article class="card">
+      <div class="card-head">
+        <div class="avatar"><img src="Boysimage/pinterest1.jpeg" alt="Aarohi"></div>
+        <div>
+          <div class="name">Manav Bansal <span class="meta">• 26</span></div>
+          <div class="location">Noida</div>
+          <div class="profession">Software Developer</div>
+        </div>
+      </div>
+      <p class="bio">Enjoys coding, gaming, and late-night chai with friends.</p>
+      <div class="actions">
+        <button class="btn btn-like">Like</button>
+        <button class="btn btn-connect">Connect</button>
+      </div>
+    </article>
+    <article class="card">
+      <div class="card-head">
+        <div class="avatar"><img src="Boysimage/pinterest1.jpeg" alt="Bhavna"></div>
+        <div>
+          <div class="name">Ritesh Saini <span class="meta">• 28</span></div>
+          <div class="location">Jaipur</div>
+          <div class="profession">Operations Lead</div>
+        </div>
+      </div>
+      <p class="bio">Organized and optimistic. Loves cooking and short trips.</p>
+      <div class="actions">
+        <button class="btn btn-like">Like</button>
+        <button class="btn btn-connect">Connect</button>
+      </div>
+    </article>
+    <article class="card">
+      <div class="card-head">
+        <div class="avatar"><img src="Boysimage/pinterest1.jpeg" alt="Nikita"></div>
+        <div>
+          <div class="name">Harsh Vardhan <span class="meta">• 24</span></div>
+          <div class="location">Patna</div>
+          <div class="profession">Mechanical Engineer</div>
+        </div>
+      </div>
+      <p class="bio">Enjoys fitness, bike rides, and weekend movies.</p>
+      <div class="actions">
+        <button class="btn btn-like">Like</button>
+        <button class="btn btn-connect">Connect</button>
+      </div>
+    </article>
+    <article class="card">
+      <div class="card-head">
+        <div class="avatar"><img src="Boysimage/pinterest1.jpeg" alt="Shreya"></div>
+        <div>
+          <div class="name">Sameer Qureshi <span class="meta">• 30</span></div>
+          <div class="location">Bhopal</div>
+          <div class="profession">Financial Analyst</div>
+        </div>
+      </div>
+      <p class="bio">Enjoys investing, football, and evening walks.</p>
+      <div class="actions">
+        <button class="btn btn-like"> Like</button>
+        <button class="btn btn-connect"> Connect</button>
+      </div>
+    </article>
+    <article class="card">
+      <div class="card-head">
+        <div class="avatar"><img src="Boysimage/pinterest1.jpeg" alt="Tanvi"></div>
+        <div>
+          <div class="name">Deepak Shetty <span class="meta">• 27</span></div>
+          <div class="location">Mangaluru</div>
+          <div class="profession">Chef</div>
+        </div>
+      </div>
+      <p class="bio">Food lover. Enjoys experimenting with recipes and beach runs.</p>
+      <div class="actions">
+        <button class="btn btn-like"> Like</button>
+        <button class="btn btn-connect"> Connect</button>
+      </div>
+    </article>
+    <article class="card">
+      <div class="card-head">
+        <div class="avatar"><img src="Boysimage/pinterest1.jpeg" alt="Mitali"></div>
+        <div>
+          <div class="name">Omkar Patil <span class="meta">• 23</span></div>
+          <div class="location">Nashik</div>
+          <div class="profession">Government Officer</div>
+        </div>
+      </div>
+      <p class="bio">Family-first. Enjoys reading, travel, and hiking.</p>
+      <div class="actions">
+        <button class="btn btn-like"> Like</button>
+        <button class="btn btn-connect"> Connect</button>
+      </div>
+    </article>
+    <article class="card">
+      <div class="card-head">
+        <div class="avatar"><img src="Boysimage/pinterest1.jpeg" alt="Aditi"></div>
+        <div>
+          <div class="name">Yash Rajput <span class="meta">• 26</span></div>
+          <div class="location">Indore</div>
+          <div class="profession">Photographer</div>
+        </div>
+      </div>
+      <p class="bio">Loves portraits, travel reels, and street food hunts.</p>
+      <div class="actions">
+        <button class="btn btn-like"> Like</button>
+        <button class="btn btn-connect"> Connect</button>
+      </div>
+    </article>
+    <article class="card">
+      <div class="card-head">
+        <div class="avatar"><img src="Boysimage/pinterest1.jpeg" alt="Ritu"></div>
+        <div>
+          <div class="name">Tanmay Kulkarni <span class="meta">• 30</span></div>
+          <div class="location">Pune</div>
+          <div class="profession">Data Scientist</div>
+        </div>
+      </div>
+      <p class="bio">Enjoys AI, running, and board games on weekends.</p>
+      <div class="actions">
+        <button class="btn btn-like"> Like</button>
+        <button class="btn btn-connect"> Connect</button>
+      </div>
+    </article>
+    <article class="card">
+      <div class="card-head">
+        <div class="avatar"><img src="Boysimage/pinterest1.jpeg" alt="Sakshi"></div>
+        <div>
+          <div class="name">Shubham Tiwari <span class="meta">• 24</span></div>
+          <div class="location">Kanpur</div>
+          <div class="profession">Banker</div>
+        </div>
+      </div>
+      <p class="bio">Enjoys finance, music, and family time. Loves chai.</p>
+      <div class="actions">
+        <button class="btn btn-like"> Like</button>
+        <button class="btn btn-connect"> Connect</button>
+      </div>
+    </article>
+    <article class="card">
+      <div class="card-head">
+        <div class="avatar"><img src="Boysimage/pinterest1.jpeg" alt="Pallavi"></div>
+        <div>
+          <div class="name">Karthik Ramanan <span class="meta">• 28</span></div>
+          <div class="location">Chennai</div>
+          <div class="profession">Biotechnologist</div>
+        </div>
+      </div>
+      <p class="bio">Science lover. Enjoys documentaries, gyms, and music.</p>
+      <div class="actions">
+        <button class="btn btn-like"> Like</button>
+        <button class="btn btn-connect"> Connect</button>
+      </div>
+    </article>
+    <article class="card">
+      <div class="card-head">
+        <div class="avatar"><img src="Boysimage/pinterest1.jpeg" alt="Harshita"></div>
+        <div>
+          <div class="name">Mohit Jain <span class="meta">• 27</span></div>
+          <div class="location">Meerut</div>
+          <div class="profession">Lawyer</div>
+        </div>
+      </div>
+      <p class="bio">Enjoys reading, swimming, and weekend trips.</p>
+      <div class="actions">
+        <button class="btn btn-like"> Like</button>
+        <button class="btn btn-connect"> Connect</button>
+      </div>
+    </article>
+    <article class="card">
+      <div class="card-head">
+        <div class="avatar"><img src="Boysimage/pinterest1.jpeg" alt="Priyanka"></div>
+        <div>
+          <div class="name">Rajat Arora <span class="meta">• 30</span></div>
+          <div class="location">Delhi</div>
+          <div class="profession">Event Manager</div>
+        </div>
+      </div>
+      <p class="bio">Loves planning, music festivals, and photography.</p>
+      <div class="actions">
+        <button class="btn btn-like"> Like</button>
+        <button class="btn btn-connect"> Connect</button>
+      </div>
+    </article>
+    <article class="card">
+      <div class="card-head">
+        <div class="avatar"><img src="Boysimage/pinterest1.jpeg" alt="Ankita"></div>
+        <div>
+          <div class="name">Naveen Reddy <span class="meta">• 26</span></div>
+          <div class="location">Hyderabad</div>
+          <div class="profession">Dentist</div>
+        </div>
+      </div>
+      <p class="bio">Calm and caring. Enjoys badminton and cooking.</p>
+      <div class="actions">
+        <button class="btn btn-like"> Like</button>
+        <button class="btn btn-connect"> Connect</button>
+      </div>
+    </article>
+    <article class="card">
+      <div class="card-head">
+        <div class="avatar"><img src="Boysimage/pinterest1.jpeg" alt="Snehal"></div>
+        <div>
+          <div class="name">Sandeep Rao <span class="meta">• 26</span></div>
+          <div class="location">Mysuru</div>
+          <div class="profession">Teacher</div>
+        </div>
+      </div>
+      <p class="bio">Enjoys books, gardening, and calm conversations.</p>
+      <div class="actions">
+        <button class="btn btn-like"> Like</button>
+        <button class="btn btn-connect"> Connect</button>
+      </div>
+    </article>
+
+    </section>
+  </main>
+
+  <!-- Particle background removed -->
+  <div class="like-toast" id="likeToast" role="status" aria-live="polite"></div>
+</body>
+  <script type="module">
+    import { auth, database } from "./firebase-config.js";
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+    import { ref, get } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
+
+    // Dropdown open/close logic with outside click
+    const dropdown = document.getElementById('profileDropdown');
+    const toggle = document.getElementById('dropdownToggle');
+    const menu = document.getElementById('dropdownMenu');
+    const myProfileBtn = document.getElementById('menuMyProfile');
+    const menuMessages = document.getElementById('menuMessages');
+    const menuChat = document.getElementById('menuChat');
+    const menuHelp = document.getElementById('menuHelp');
+    const menuLogout = document.getElementById('menuLogout');
+    const navbarProfileAvatar = document.getElementById('navbarProfileAvatar');
+    const navbarProfileText = document.getElementById('navbarProfileText');
+    const navbarProfileImg = document.getElementById('navbarProfileImg');
+    const menuUserAvatar = document.getElementById('menuUserAvatar');
+    const menuUserFallback = document.getElementById('menuUserFallback');
+    const menuDisplayName = document.getElementById('menuDisplayName');
+    const menuHandle = document.getElementById('menuHandle');
+    const navbarHeart = document.getElementById('navbarHeart');
+    const navbarHeartBtn = document.getElementById('navbarHeartBtn');
+    const navbarHeartBadge = document.getElementById('navbarHeartBadge');
+    const heartLikesCount = document.getElementById('heartLikesCount');
+    const likeToast = document.getElementById('likeToast');
+
+    const PROFILE_LIKES_KEY = 'vivah_profileLikes';
+    const PROFILE_LIKES_UNREAD_KEY = 'vivah_profileLikesUnread';
+
+    function getInt(key, fallback) {
+      const raw = localStorage.getItem(key);
+      const n = parseInt(raw || '', 10);
+      return Number.isFinite(n) ? n : fallback;
+    }
+
+    function showToast(message) {
+      if (!likeToast) return;
+      likeToast.textContent = message;
+      likeToast.classList.add('show');
+      window.clearTimeout(showToast._t);
+      showToast._t = window.setTimeout(() => likeToast.classList.remove('show'), 2200);
+    }
+
+    function setLikesUnread(isUnread) {
+      localStorage.setItem(PROFILE_LIKES_UNREAD_KEY, isUnread ? '1' : '0');
+    }
+
+    function updateHeartUi() {
+      const likes = getInt(PROFILE_LIKES_KEY, 0);
+      const unread = localStorage.getItem(PROFILE_LIKES_UNREAD_KEY) === '1';
+
+      if (heartLikesCount) heartLikesCount.textContent = String(likes);
+
+      if (navbarHeartBadge) {
+        if (unread && likes > 0) {
+          navbarHeartBadge.style.display = 'inline-flex';
+          navbarHeartBadge.textContent = '';
+          navbarHeartBadge.setAttribute('aria-label', `${likes} new like${likes === 1 ? '' : 's'}`);
+        } else {
+          navbarHeartBadge.style.display = 'none';
+        }
+      }
+    }
+
+    function incrementIncomingLike() {
+      const current = getInt(PROFILE_LIKES_KEY, 0);
+      localStorage.setItem(PROFILE_LIKES_KEY, String(current + 1));
+      setLikesUnread(true);
+      updateHeartUi();
+    }
+
+    function normalizeUsername(value) {
+      return (value || '').toString().trim().replace(/^@+/, '');
+    }
+
+    function getFirebaseUser() {
+      try {
+        return JSON.parse(localStorage.getItem('firebaseUser') || 'null');
+      } catch {
+        return null;
+      }
+    }
+
+    function getHandleForUi() {
+      const stored = normalizeUsername(localStorage.getItem('vivah_username'));
+      if (stored) return `@${stored}`;
+
+      const fb = getFirebaseUser();
+      const email = (fb?.email || '').trim();
+      if (email && email.includes('@')) return `@${email.split('@')[0]}`;
+
+      return '@user';
+    }
+
+    function getDisplayNameForUi(handleWithAt) {
+      const lsName = (localStorage.getItem('vivah_name') || '').trim();
+      if (lsName) return lsName;
+
+      const fb = getFirebaseUser();
+      const name = (fb?.displayName || '').trim();
+      if (name) return name;
+
+      const base = normalizeUsername(handleWithAt);
+      return base || 'User';
+    }
+
+    function getInitials(text) {
+      const cleaned = (text || '').toString().trim();
+      if (!cleaned) return 'U';
+      const parts = cleaned.split(/\s+/).filter(Boolean);
+      if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+      return (parts[0][0] + parts[1][0]).toUpperCase();
+    }
+
+    function applyProfileUi() {
+      const handle = getHandleForUi();
+      const displayName = getDisplayNameForUi(handle);
+      const initials = getInitials(displayName);
+
+      if (menuHandle) menuHandle.textContent = handle;
+      if (menuDisplayName) menuDisplayName.textContent = displayName;
+      if (navbarProfileText) navbarProfileText.textContent = initials;
+      if (menuUserFallback) menuUserFallback.textContent = initials;
+
+      const dpUrl = localStorage.getItem('dpUrl');
+      if (dpUrl && navbarProfileAvatar && navbarProfileImg) {
+        navbarProfileImg.src = dpUrl;
+        navbarProfileAvatar.classList.add('has-photo');
+      }
+
+      if (dpUrl && menuUserAvatar) {
+        menuUserAvatar.src = dpUrl;
+        menuUserAvatar.classList.add('show');
+        if (menuUserFallback) menuUserFallback.style.display = 'none';
+      }
+    }
+
+    async function fetchEditProfileFromFirebase(uid) {
+      try {
+        const snap = await get(ref(database, 'editprofile/' + uid));
+        if (!snap.exists()) return;
+        const data = snap.val() || {};
+        if (typeof data.name === 'string') localStorage.setItem('vivah_name', data.name);
+        if (typeof data.username === 'string') localStorage.setItem('vivah_username', String(data.username).replace(/^@+/, ''));
+      } catch (e) {
+        console.error(e);
+      } finally {
+        applyProfileUi();
+      }
+    }
+
+    applyProfileUi();
+    onAuthStateChanged(auth, (user) => {
+      if (user?.uid) fetchEditProfileFromFirebase(user.uid);
+    });
+
+    window.addEventListener('storage', (e) => {
+      if (e.key === 'vivah_name' || e.key === 'vivah_username' || e.key === 'dpUrl') {
+        applyProfileUi();
+      }
+    });
+
+    updateHeartUi();
+
+    if (navbarHeart && navbarHeartBtn) {
+      navbarHeartBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        const willOpen = !navbarHeart.classList.contains('open');
+        navbarHeart.classList.toggle('open');
+        navbarHeartBtn.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
+        if (willOpen) {
+          setLikesUnread(false);
+          updateHeartUi();
+        }
+      });
+
+      document.addEventListener('click', function(e) {
+        if (!navbarHeart.contains(e.target)) {
+          navbarHeart.classList.remove('open');
+          navbarHeartBtn.setAttribute('aria-expanded', 'false');
+        }
+      });
+
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+          navbarHeart.classList.remove('open');
+          navbarHeartBtn.setAttribute('aria-expanded', 'false');
+        }
+      });
+    }
+
+    // Demo: simulate an incoming like once per tab/session
+    try {
+      if (!sessionStorage.getItem('vivah_likeSimulated')) {
+        sessionStorage.setItem('vivah_likeSimulated', '1');
+        window.setTimeout(incrementIncomingLike, 1200);
+      }
+    } catch {}
+
+    if (dropdown && toggle && menu) {
+      toggle.addEventListener('click', function(e) {
+        e.stopPropagation();
+        dropdown.classList.toggle('open');
+        toggle.setAttribute('aria-expanded', dropdown.classList.contains('open'));
+      });
+      document.addEventListener('click', function(e) {
+        if (!dropdown.contains(e.target)) {
+          dropdown.classList.remove('open');
+          toggle.setAttribute('aria-expanded', 'false');
+        }
+      });
+      // Keyboard accessibility
+      toggle.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+          dropdown.classList.remove('open');
+          toggle.setAttribute('aria-expanded', 'false');
+        }
+      });
+
+      if (myProfileBtn) {
+        myProfileBtn.addEventListener('click', function() {
+          window.location.href = 'Account.html';
+        });
+      }
+
+      if (menuLogout) {
+        menuLogout.addEventListener('click', function() {
+          localStorage.removeItem('firebaseUser');
+          localStorage.removeItem('authProvider');
+          window.location.href = 'login.html';
+        });
+      }
+
+      if (menuMessages) {
+        menuMessages.addEventListener('click', function() {
+          alert('Comments coming soon');
+        });
+      }
+
+      if (menuChat) {
+        menuChat.addEventListener('click', function() {
+          const qs = new URLSearchParams({ to: 'example-aanyasharma' });
+          window.location.href = `Chat.html?${qs.toString()}`;
+        });
+      }
+
+      if (menuHelp) {
+        menuHelp.addEventListener('click', function() {
+          alert('Help & Support coming soon');
+        });
+      }
+    }
+
+    const MATCHES_FEMALE_IMAGE_POOL = Object.freeze([
+      'Boysimage/pinterest1.jpeg',
+      'Boysimage/pinterest2.jpeg',
+      'Boysimage/pinterest3.jpeg',
+      'Boysimage/pinterest4.jpeg',
+      'Boysimage/pinterest5.jpeg',
+      'Boysimage/pinterest6.jpeg',
+      'Boysimage/pinterest7.jpeg',
+      'Boysimage/pinterest20.jpeg',
+      'Boysimage/pinterest9.jpeg',
+      'Boysimage/pinterest10.jpeg',
+      'Boysimage/pinterest11.jpeg',
+      'Boysimage/pinterest12.jpeg',
+      'Boysimage/pinterest13.jpeg',
+      'Boysimage/pinterest14.jpeg',
+      'Boysimage/pinterest15.jpeg',
+      'Boysimage/pinterest16.jpeg',
+      'Boysimage/pinterest17.jpeg',
+      'Boysimage/pinterest18.jpeg',
+    ]);
+
+    function shuffleArray(input, rng = Math.random) {
+      const arr = Array.isArray(input) ? [...input] : [];
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(rng() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    function assignMatchCardImages({
+      cardsSelector = '.matches-grid .card',
+      imgSelector = '.avatar img',
+      primaryCount = 18,
+      pool = MATCHES_FEMALE_IMAGE_POOL,
+      rng = Math.random,
+    } = {}) {
+      const cards = Array.from(document.querySelectorAll(cardsSelector));
+      if (!cards.length) return { pool: [...pool], primary: [], leftover: [] };
+
+      const effectivePrimaryCount = Math.min(primaryCount, pool.length, cards.length);
+      const primaryAssigned = [];
+      const leftoverAssigned = [];
+
+      // Primary: first N cards get unique images in a stable order.
+      for (let i = 0; i < effectivePrimaryCount; i++) {
+        const img = cards[i].querySelector(imgSelector);
+        if (!img) continue;
+        if (img.dataset?.fixedSrc) continue;
+        img.src = pool[i];
+        primaryAssigned.push(pool[i]);
+      }
+
+      // Leftover: reuse the same pool, but shuffled in "bags" to avoid clumps.
+      let bag = [];
+      let bagIndex = 0;
+      const nextFromBag = () => {
+        if (bagIndex >= bag.length) {
+          bag = shuffleArray(pool, rng);
+          bagIndex = 0;
+        }
+        return bag[bagIndex++];
+      };
+
+      for (let i = effectivePrimaryCount; i < cards.length; i++) {
+        const img = cards[i].querySelector(imgSelector);
+        if (!img) continue;
+        if (img.dataset?.fixedSrc) continue;
+        const picked = nextFromBag();
+        img.src = picked;
+        leftoverAssigned.push(picked);
+      }
+
+      const state = {
+        pool: [...pool],
+        primary: primaryAssigned,
+        leftover: leftoverAssigned,
+        primaryCount: effectivePrimaryCount,
+        totalCards: cards.length,
+      };
+
+      window.vivahMatchesFemaleImages = state;
+      return state;
+    }
+
+    function addVerifiedTicks() {
+      const professions = document.querySelectorAll('.matches-grid .profession');
+      professions.forEach(function (el) {
+        if (el.querySelector('.verified-tick')) return;
+
+        const icon = document.createElement('i');
+        icon.className = 'fa-solid fa-circle-check verified-tick';
+        icon.title = 'Verified';
+        icon.setAttribute('aria-hidden', 'true');
+        el.appendChild(icon);
+      });
+    }
+
+    // Run after DOM is ready (module scripts are deferred, but keep it explicit).
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => {
+        addVerifiedTicks();
+        assignMatchCardImages();
+
+        // Age rules: force every card into 25..30 (inclusive)
+        (function applyAges25to30() {
+          const metas = Array.from(document.querySelectorAll('.matches-grid .name .meta'));
+
+          function randomIntInclusive(min, max) {
+            const low = Math.ceil(min);
+            const high = Math.floor(max);
+            if (high < low) return low;
+
+            const range = high - low + 1;
+            try {
+              const arr = new Uint32Array(1);
+              crypto.getRandomValues(arr);
+              return low + (arr[0] % range);
+            } catch {
+              return low + Math.floor(Math.random() * range);
+            }
+          }
+
+          function shuffleInPlace(arr) {
+            for (let i = arr.length - 1; i > 0; i--) {
+              const j = randomIntInclusive(0, i);
+              [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+          }
+
+          const ages = [];
+          while (ages.length < metas.length) {
+            for (let a = 25; a <= 30 && ages.length < metas.length; a++) ages.push(a);
+          }
+          shuffleInPlace(ages);
+
+          metas.forEach((meta, idx) => {
+            const nextAge = ages[idx] ?? 25;
+            meta.textContent = `• ${nextAge}`;
+          });
+        })();
+      });
+    } else {
+      addVerifiedTicks();
+      assignMatchCardImages();
+
+      // Age rules: force every card into 25..30 (inclusive)
+      (function applyAges25to30() {
+        const metas = Array.from(document.querySelectorAll('.matches-grid .name .meta'));
+
+        function randomIntInclusive(min, max) {
+          const low = Math.ceil(min);
+          const high = Math.floor(max);
+          if (high < low) return low;
+
+          const range = high - low + 1;
+          try {
+            const arr = new Uint32Array(1);
+            crypto.getRandomValues(arr);
+            return low + (arr[0] % range);
+          } catch {
+            return low + Math.floor(Math.random() * range);
+          }
+        }
+
+        function shuffleInPlace(arr) {
+          for (let i = arr.length - 1; i > 0; i--) {
+            const j = randomIntInclusive(0, i);
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+          }
+          return arr;
+        }
+
+        const ages = [];
+        while (ages.length < metas.length) {
+          for (let a = 25; a <= 30 && ages.length < metas.length; a++) ages.push(a);
+        }
+        shuffleInPlace(ages);
+
+        metas.forEach((meta, idx) => {
+          const nextAge = ages[idx] ?? 25;
+          meta.textContent = `• ${nextAge}`;
+        });
+      })();
+    }
+  </script>
+</html>

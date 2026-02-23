@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Vivah –Marital Status</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    body, html {
+      height: 100%;
+      width: 100%;
+    }
+
+    /* 🔥 SAME BACKGROUND */
+    .hero {
+      background: #E34450;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      color: white;
+    }
+
+    .overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.35);
+      z-index: 1;
+    }
+
+    /* 🔥 SAME CARD */
+    .register-card {
+      position: relative;
+      z-index: 2;
+      max-width: 420px;
+      width: 90%;
+      padding: 40px;
+      border-radius: 12px;
+      background-color: rgba(0,0,0,0.55);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+      text-align: center;
+    }
+
+    h2 {
+      margin-bottom: 25px;
+      font-size: 26px;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+      text-align: left;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #dddddd;
+    }
+
+    select {
+      width: 100%;
+      padding: 12px 15px;
+      border-radius: 6px;
+      border: none;
+      background-color: rgba(0,0,0,0.7);
+      color: #ffffff;
+      font-size: 15px;
+    }
+
+    select option {
+      background: #120405;
+      color: #ffffff;
+    }
+
+    select:focus {
+      outline: none;
+      background-color: rgba(0,0,0,0.85);
+    }
+
+    .continue-btn {
+      width: 100%;
+      padding: 12px;
+      margin-top: 20px;
+      border-radius: 6px;
+      border: none;
+      background-color: #ff2d55;
+      color: #ffffff;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .continue-btn:hover {
+      background-color: #e0244b;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="hero">
+    <div class="overlay"></div>
+
+    <div class="register-card">
+      <h2>Marital Status</h2>
+
+      <!-- Marital Status -->
+      <div class="form-group">
+        <label>Marital Status</label>
+        <select required>
+          <option value="">Your Marital Status</option>
+          <option>Unmarried</option>
+          <option>Divorced</option>
+          <option>Widowed</option>
+          <option>Awaiting Divorce</option>
+        </select>
+      </div>
+
+      <!-- Height -->
+      <div class="form-group">
+        <label>Height</label>
+        <select required>
+          <option value="">Height</option>
+          <option>4'0"</option>
+          <option>4'6"</option>
+          <option>5'0"</option>
+          <option>5'3"</option>
+          <option>5'6"</option>
+          <option>5'9"</option>
+          <option>6'0"</option>
+          <option>6'3"</option>
+          <option>6'6"</option>
+          <option>7'0"</option>
+        </select>
+      </div>
+
+      <!-- Diet -->
+      <div class="form-group">
+        <label>Diet Preference</label>
+        <select required>
+          <option value="">Diet</option>
+          <option>Vegetarian</option>
+          <option>Non-Vegetarian</option>
+          <option>Eggetarian</option>
+          <option>Jain</option>
+          <option>Vegan</option>
+        </select>
+      </div>
+
+      <button class="continue-btn">Continue</button>
+    </div>
+  </div>
+  <script type="module" src="./script.js/Marital.js"></script>
+</body>
+</html>

@@ -1,0 +1,67 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Firebase chat collection
+    match /chat/{messageId} {
+      allow read: if true;
+
+      allow create: if
+        request.resource.data.text is string
+        && request.resource.data.text.size() <= 1000
+        && request.resource.data.sender is string
+        && request.resource.data.sender.size() > 0
+        && request.resource.data.sender.size() <= 80
+        && request.resource.data.receiver is string
+        && request.resource.data.receiver.size() > 0
+        && request.resource.data.receiver.size() <= 80
+        && request.resource.data.timestamp is timestamp;
+
+      allow update: if
+        request.resource.data.sender == resource.data.sender
+        && request.resource.data.receiver == resource.data.receiver
+        && request.resource.data.timestamp == resource.data.timestamp
+        && request.resource.data.text is string
+        && request.resource.data.text.size() <= 1000;
+
+      allow delete: if true;
+    }
+
+    function validRoomName() {
+      return request.resource.data.name is string
+        && request.resource.data.name.size() > 0
+        && request.resource.data.name.size() <= 120;
+    }
+
+    function validEncryptedMessage() {
+      return request.resource.data.sender is string
+        && request.resource.data.sender.size() > 0
+        && request.resource.data.sender.size() <= 80
+        && request.resource.data.ciphertext is string
+        && request.resource.data.ciphertext.size() > 0
+        && request.resource.data.ciphertext.size() <= 5000
+        && request.resource.data.iv is string
+        && request.resource.data.iv.size() > 0
+        && request.resource.data.iv.size() <= 80
+        && request.resource.data.alg is string
+        && request.resource.data.alg == "AES-GCM"
+        && request.resource.data.v is int
+        && request.resource.data.v == 1;
+    }
+
+    // Chat rooms
+    match /chatRooms/{roomId} {
+      allow read: if true;
+      allow create, update: if validRoomName();
+
+      // Messages subcollection
+      match /messages/{messageId} {
+        allow read: if true;
+        allow create: if validEncryptedMessage();
+      }
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
