@@ -496,6 +496,7 @@
           <div class="dropdown-divider" role="presentation"></div>
 
           <button class="dropdown-menu-item" id="menuMyProfile"><i class="fa fa-user"></i> Profile</button>
+          <button class="dropdown-menu-item" id="menuMatch"><i class="fa-solid fa-heart" aria-hidden="true"></i> Match</button>
           <button class="dropdown-menu-item" id="menuChat"><i class="fa-solid fa-comments"></i> Chats</button>
           <button class="dropdown-menu-item" id="menuStore"><i class="fa-solid fa-bag-shopping"></i> Vivah Store</button>
           <button class="dropdown-menu-item" id="menuVenue"><i class="fa-solid fa-building-columns"></i> Venue Selection</button>
@@ -719,6 +720,7 @@
     const toggle = document.getElementById('dropdownToggle');
     const menu = document.getElementById('dropdownMenu');
     const myProfileBtn = document.getElementById('menuMyProfile');
+    const menuMatch = document.getElementById('menuMatch');
     const menuChat = document.getElementById('menuChat');
     const menuStore = document.getElementById('menuStore');
     const menuVenue = document.getElementById('menuVenue');
@@ -908,6 +910,17 @@
       if (myProfileBtn) {
         myProfileBtn.addEventListener('click', function() {
           window.location.href = 'Account.html';
+        });
+      }
+
+      function getMatchTargetPage() {
+        const pref = (localStorage.getItem('partnerPreference') || '').toString().trim().toLowerCase();
+        return pref === 'female' ? 'MatchesFemale.html' : 'Matches.html';
+      }
+
+      if (menuMatch) {
+        menuMatch.addEventListener('click', function() {
+          window.location.href = getMatchTargetPage();
         });
       }
 

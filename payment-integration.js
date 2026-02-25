@@ -3,7 +3,8 @@
 // Use window.Razorpay for Razorpay
 
 // Example: Start Razorpay payment
-async function startPayment({ amount, plan, name, email, phone }) {
+// successRedirectUrl: where to go after successful payment (default: PartnerSelection.html)
+async function startPayment({ amount, plan, name, email, phone, successRedirectUrl }) {
   // IMPORTANT (security): do not store sensitive payment data client-side.
   // We only use Razorpay *prefill* values (name/email) to update the user's Firebase profile.
 
@@ -55,7 +56,7 @@ async function startPayment({ amount, plan, name, email, phone }) {
         .catch((e) => console.warn('Post-payment actions skipped:', e))
         .finally(() => {
           alert('Payment successful! Payment ID: ' + response.razorpay_payment_id);
-          window.location.href = 'PartnerSelection.html';
+          window.location.href = (successRedirectUrl || 'PartnerSelection.html');
         });
     },
     prefill: {
@@ -142,10 +143,23 @@ async function savePaymentToFirebaseRTDB({ plan, amount, currency, prefill, razo
     const bucketBase = ref(database, `paymentBucket`);
     const bucketRef = safeKey ? ref(database, `paymentBucket/${safeKey}`) : push(bucketBase);
 
+    const membershipRef = ref(database, `users/${uid}/membership`);
+    const membershipPayload = {
+      plan: record.plan,
+      amount: record.amount,
+      currency: record.currency,
+      status: record.status,
+      paymentId: record.razorpay.paymentId,
+      createdAt: record.createdAt,
+      updatedAt: new Date().toISOString(),
+      updatedAtServer: serverTimestamp(),
+    };
+
     await Promise.race([
       Promise.all([
         set(perUserRef, { ...record, uid, createdAtServer: serverTimestamp() }),
         set(bucketRef, { ...record, uid, createdAtServer: serverTimestamp() }),
+        set(membershipRef, membershipPayload),
       ]),
       sleep(1800),
     ]);

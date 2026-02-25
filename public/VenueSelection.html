@@ -497,11 +497,11 @@
     }
 
     .actions {
-      display: flex;
-      gap: 12px;
-      margin-top: 10px;
-      width: 100%;
-      justify-content: center;
+      display: none;
+    }
+
+    .venue-clickable {
+      cursor: pointer;
     }
 
     .btn {
@@ -560,19 +560,9 @@
     <div class="navbar-logo" id="navbarLogo">Vivah</div>
 
     <div class="navbar-profile">
-      <div class="navbar-heart" id="navbarHeart">
-        <button class="navbar-heart-btn" id="navbarHeartBtn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Notifications">
-          <i class="fa-regular fa-heart" aria-hidden="true"></i>
-        </button>
-        <span class="navbar-heart-badge" id="navbarHeartBadge" style="display:none;">1</span>
-
-        <div class="heart-menu" id="navbarHeartMenu" role="menu" aria-label="Notifications">
-          <button class="heart-like-row" type="button" id="heartLikes" aria-label="Profile likes">
-            <i class="fa-solid fa-heart" aria-hidden="true"></i>
-            <span id="heartLikesCount">0</span>
-          </button>
-        </div>
-      </div>
+      <button class="navbar-heart-btn" id="navbarBookingsBtn" type="button" aria-label="My Bookings">
+        <i class="fa-solid fa-calendar-check" aria-hidden="true"></i>
+      </button>
 
       <div class="dropdown" id="profileDropdown">
         <button class="dropdown-toggle" id="dropdownToggle" aria-haspopup="true" aria-expanded="false" aria-label="Open profile menu">
@@ -594,6 +584,7 @@
           <div class="dropdown-divider" role="presentation"></div>
 
           <button class="dropdown-menu-item" id="menuMyProfile"><i class="fa fa-user"></i> Profile</button>
+          <button class="dropdown-menu-item" id="menuMatch"><i class="fa-solid fa-heart" aria-hidden="true"></i> Match</button>
           <button class="dropdown-menu-item" id="menuChat"><i class="fa-solid fa-comments"></i> Chats</button>
           <button class="dropdown-menu-item" id="menuStore"><i class="fa-solid fa-bag-shopping"></i> Vivah Store</button>
           <button class="dropdown-menu-item" id="menuVenue"><i class="fa-solid fa-building-columns"></i> Venue Selection</button>
@@ -861,6 +852,36 @@
           </div>
         </div>
       </article>
+
+      <article class="card" data-id="farmhouse" data-name="Hilltop Farmhouse" data-city="Delhi">
+        <div class="venue-media">
+          <img src="images/littleheart2.jpg" alt="Hilltop Farmhouse">
+        </div>
+        <div class="venue-body">
+          <div class="venue-title-row">
+            <div class="venue-name">Hilltop Farmhouse</div>
+            <div class="venue-rating" aria-label="Rating 4.7"><i class="fa-solid fa-star" aria-hidden="true"></i><span>4.7</span></div>
+          </div>
+          <div class="venue-meta-row">
+            <span><i class="fa-solid fa-location-dot" aria-hidden="true"></i>Delhi</span>
+            <span><i class="fa-solid fa-seedling" aria-hidden="true"></i>Farmhouse Venue</span>
+          </div>
+          <div class="venue-prices" aria-label="Price per plate">
+            <div class="price-box"><div class="price-label">Veg</div><div class="price-value">₹1,250</div><div class="price-sub">per plate</div></div>
+            <div class="price-box"><div class="price-label">Non-veg</div><div class="price-value">₹1,450</div><div class="price-sub">per plate</div></div>
+          </div>
+          <div class="venue-tags" aria-label="Venue details">
+            <span class="chip">100-450 pax</span>
+            <span class="chip">Lawn + Indoor</span>
+            <span class="chip">Farmhouse</span>
+          </div>
+          <p class="bio">Farmhouse setup with open lawn and indoor hall for premium functions.</p>
+          <div class="actions">
+            <button class="btn" type="button" data-action="select"><i class="fa-solid fa-check" aria-hidden="true"></i><span>Select</span></button>
+            <button class="btn" type="button" data-action="book"><i class="fa-solid fa-phone" aria-hidden="true"></i><span>Book</span></button>
+          </div>
+        </div>
+      </article>
     </section>
   </main>
 
@@ -868,6 +889,12 @@
     import { auth, database } from "./firebase-config.js";
     import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
     import { ref, get } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
+    import { applyPendingPaymentProfileSync } from "./script.js/profile-sync.js";
+    import { applyPendingPaymentRecordSync } from "./script.js/payment-record-sync.js";
+
+    // Best-effort: if a payment just happened, sync name/username and store payment/membership now.
+    applyPendingPaymentProfileSync({ auth, database }).catch(() => {});
+    applyPendingPaymentRecordSync({ auth, database }).catch(() => {});
 
     const REQUIRED_PLAN = '12-month';
 
@@ -901,11 +928,38 @@
       if (venueGrid) venueGrid.style.display = allowed ? 'grid' : 'none';
     }
 
+    async function fetchMembershipFromFirebase(uid) {
+      try {
+        if (hasVenueAccess()) return;
+        const snap = await get(ref(database, `users/${uid}/membership`));
+        if (!snap.exists()) return;
+
+        const data = snap.val() || {};
+        const membership = {
+          plan: String(data?.plan || ''),
+          amount: Number(data?.amount || 0),
+          currency: String(data?.currency || 'INR'),
+          status: String(data?.status || 'success'),
+          paymentId: String(data?.paymentId || ''),
+          createdAt: String(data?.createdAt || data?.updatedAt || new Date().toISOString()),
+        };
+
+        localStorage.setItem('vivah_membership_v1', JSON.stringify(membership));
+        localStorage.setItem('vivah_membership_plan', membership.plan);
+      } catch (e) {
+        console.warn('Membership fetch failed:', e);
+      } finally {
+        applyLockUi();
+        try { wireVenueCards(); } catch {}
+      }
+    }
+
     // Dropdown open/close logic with outside click
     const dropdown = document.getElementById('profileDropdown');
     const toggle = document.getElementById('dropdownToggle');
     const menu = document.getElementById('dropdownMenu');
     const myProfileBtn = document.getElementById('menuMyProfile');
+    const menuMatch = document.getElementById('menuMatch');
     const menuChat = document.getElementById('menuChat');
     const menuStore = document.getElementById('menuStore');
     const menuVenue = document.getElementById('menuVenue');
@@ -918,40 +972,7 @@
     const menuUserFallback = document.getElementById('menuUserFallback');
     const menuDisplayName = document.getElementById('menuDisplayName');
     const menuHandle = document.getElementById('menuHandle');
-    const navbarHeart = document.getElementById('navbarHeart');
-    const navbarHeartBtn = document.getElementById('navbarHeartBtn');
-    const navbarHeartBadge = document.getElementById('navbarHeartBadge');
-    const heartLikesCount = document.getElementById('heartLikesCount');
-
-    const PROFILE_LIKES_KEY = 'vivah_profileLikes';
-    const PROFILE_LIKES_UNREAD_KEY = 'vivah_profileLikesUnread';
-
-    function getInt(key, fallback) {
-      const raw = localStorage.getItem(key);
-      const n = parseInt(raw || '', 10);
-      return Number.isFinite(n) ? n : fallback;
-    }
-
-    function setLikesUnread(isUnread) {
-      localStorage.setItem(PROFILE_LIKES_UNREAD_KEY, isUnread ? '1' : '0');
-    }
-
-    function updateHeartUi() {
-      const likes = getInt(PROFILE_LIKES_KEY, 0);
-      const unread = localStorage.getItem(PROFILE_LIKES_UNREAD_KEY) === '1';
-
-      if (heartLikesCount) heartLikesCount.textContent = String(likes);
-
-      if (navbarHeartBadge) {
-        if (unread && likes > 0) {
-          navbarHeartBadge.style.display = 'inline-flex';
-          navbarHeartBadge.textContent = '';
-          navbarHeartBadge.setAttribute('aria-label', `${likes} new like${likes === 1 ? '' : 's'}`);
-        } else {
-          navbarHeartBadge.style.display = 'none';
-        }
-      }
-    }
+    const navbarBookingsBtn = document.getElementById('navbarBookingsBtn');
 
     function normalizeUsername(value) {
       return (value || '').toString().trim().replace(/^@+/, '');
@@ -1031,7 +1052,10 @@
 
     applyProfileUi();
     onAuthStateChanged(auth, (user) => {
-      if (user?.uid) fetchEditProfileFromFirebase(user.uid);
+      if (user?.uid) {
+        fetchEditProfileFromFirebase(user.uid);
+        fetchMembershipFromFirebase(user.uid);
+      }
     });
 
     window.addEventListener('storage', (e) => {
@@ -1041,32 +1065,9 @@
       }
     });
 
-    updateHeartUi();
-
-    if (navbarHeart && navbarHeartBtn) {
-      navbarHeartBtn.addEventListener('click', function(e) {
-        e.stopPropagation();
-        const willOpen = !navbarHeart.classList.contains('open');
-        navbarHeart.classList.toggle('open');
-        navbarHeartBtn.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
-        if (willOpen) {
-          setLikesUnread(false);
-          updateHeartUi();
-        }
-      });
-
-      document.addEventListener('click', function(e) {
-        if (!navbarHeart.contains(e.target)) {
-          navbarHeart.classList.remove('open');
-          navbarHeartBtn.setAttribute('aria-expanded', 'false');
-        }
-      });
-
-      document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') {
-          navbarHeart.classList.remove('open');
-          navbarHeartBtn.setAttribute('aria-expanded', 'false');
-        }
+    if (navbarBookingsBtn) {
+      navbarBookingsBtn.addEventListener('click', function() {
+        window.location.href = 'MyBookings.html';
       });
     }
 
@@ -1094,6 +1095,17 @@
       if (myProfileBtn) {
         myProfileBtn.addEventListener('click', function() {
           window.location.href = 'Account.html';
+        });
+      }
+
+      function getMatchTargetPage() {
+        const pref = (localStorage.getItem('partnerPreference') || '').toString().trim().toLowerCase();
+        return pref === 'female' ? 'MatchesFemale.html' : 'Matches.html';
+      }
+
+      if (menuMatch) {
+        menuMatch.addEventListener('click', function() {
+          window.location.href = getMatchTargetPage();
         });
       }
 
@@ -1143,46 +1155,38 @@
     const upgradeBtn = document.getElementById('upgradeBtn');
     if (upgradeBtn) {
       upgradeBtn.addEventListener('click', () => {
-        window.location.href = 'Payment.html';
+        window.location.href = 'VenueUpgrade.html';
       });
     }
 
     function wireVenueCards() {
       const allowed = hasVenueAccess();
       if (!allowed) return;
-
-      const SELECTED_KEY = 'vivah_selectedVenue_v1';
       const cards = Array.from(document.querySelectorAll('#venueGrid .card'));
 
       cards.forEach((card) => {
-        const selectBtn = card.querySelector('[data-action="select"]');
-        const bookBtn = card.querySelector('[data-action="book"]');
+        if (card.dataset.venueWired === '1') return;
+        const venueId = (card.dataset.id || '').toString();
+        if (!venueId) return;
 
-        const venue = {
-          id: card.dataset.id || '',
-          name: card.dataset.name || '',
-          city: card.dataset.city || '',
-          ts: Date.now(),
+        card.dataset.venueWired = '1';
+
+        card.classList.add('venue-clickable');
+        card.setAttribute('role', 'button');
+        card.setAttribute('tabindex', '0');
+        card.setAttribute('aria-label', `View details for ${(card.dataset.name || 'venue').toString()}`);
+
+        const go = () => {
+          window.location.href = `VenueDetails.html?id=${encodeURIComponent(venueId)}`;
         };
 
-        if (selectBtn) {
-          selectBtn.addEventListener('click', () => {
-            try { localStorage.setItem(SELECTED_KEY, JSON.stringify(venue)); } catch {}
-            const span = selectBtn.querySelector('span');
-            if (span) {
-              const prev = span.textContent;
-              span.textContent = 'Selected';
-              selectBtn.disabled = true;
-              window.setTimeout(() => { span.textContent = prev; selectBtn.disabled = false; }, 900);
-            }
-          });
-        }
-
-        if (bookBtn) {
-          bookBtn.addEventListener('click', () => {
-            alert('Booking request sent!');
-          });
-        }
+        card.addEventListener('click', go);
+        card.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            go();
+          }
+        });
       });
     }
 

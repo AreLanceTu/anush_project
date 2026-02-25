@@ -81,10 +81,23 @@ export async function applyPendingPaymentRecordSync({ auth, database }) {
   const bucketBase = ref(database, `paymentBucket`);
   const bucketRef = safeKey ? ref(database, `paymentBucket/${safeKey}`) : push(bucketBase);
 
+  const membershipRef = ref(database, `users/${uid}/membership`);
+  const membershipPayload = {
+    plan: String(record?.plan || ''),
+    amount: Number(record?.amount || 0),
+    currency: String(record?.currency || 'INR'),
+    status: String(record?.status || 'success'),
+    paymentId: String(record?.razorpay?.paymentId || ''),
+    createdAt: String(record?.createdAt || new Date().toISOString()),
+    updatedAt: new Date().toISOString(),
+    updatedAtServer: serverTimestamp(),
+  };
+
   await Promise.race([
     Promise.all([
       set(perUserRef, { ...record, uid, createdAtServer: serverTimestamp() }),
       set(bucketRef, { ...record, uid, createdAtServer: serverTimestamp() }),
+      set(membershipRef, membershipPayload),
     ]),
     sleep(1800),
   ]);
