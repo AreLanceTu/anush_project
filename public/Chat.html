@@ -145,6 +145,30 @@
       background: transparent;
     }
 
+    .chat-remove {
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--muted);
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      opacity: 0;
+      flex: 0 0 auto;
+    }
+
+    .chat-item:hover .chat-remove {
+      opacity: 1;
+    }
+
+    .chat-remove:hover {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: var(--border);
+      color: var(--text);
+    }
+
     .chat-item.active {
       background: rgba(255, 92, 168, 0.16);
       border-color: rgba(255, 92, 168, 0.35);

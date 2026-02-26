@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Purchase History</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', Inter, Arial, sans-serif;
+      background: linear-gradient(135deg, #ffe5ec 0%, #fff1f7 40%, #f7f7ff 100%);
+      min-height: 100vh;
+      color: #22232A;
+    }
+
+    .navbar {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 34px;
+      box-sizing: border-box;
+      background: rgba(255, 255, 255, 0.82);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(255, 182, 193, 0.35);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .navbar-logo {
+      font-size: 1.55rem;
+      font-weight: 700;
+      color: #e63946;
+      letter-spacing: 0.02em;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .navbar-profile {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .dropdown {
+      position: relative;
+    }
+
+    .dropdown-toggle {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      border-radius: 999px;
+    }
+
+    .navbar-profile-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 999px;
+      background: #FFF3F5;
+      border: 1.5px solid #f8bbd0;
+      display: grid;
+      place-items: center;
+      color: #c2185b;
+      font-weight: 700;
+      overflow: hidden;
+      box-shadow: 0 2px 12px rgba(255, 182, 193, 0.14);
+      transition: transform 0.18s, box-shadow 0.18s;
+    }
+
+    .navbar-profile-avatar:hover {
+      transform: translateY(-1px) scale(1.03);
+      box-shadow: 0 10px 20px rgba(255, 182, 193, 0.25);
+    }
+
+    .navbar-profile-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: none;
+    }
+
+    .navbar-profile-avatar.has-photo img {
+      display: block;
+    }
+
+    .navbar-profile-avatar.has-photo span {
+      display: none;
+    }
+
+    .dropdown-menu {
+      position: absolute;
+      right: 0;
+      top: 56px;
+      width: 260px;
+      background: rgba(255, 255, 255, 0.96);
+      border: 1px solid rgba(255, 182, 193, 0.35);
+      border-radius: 16px;
+      box-shadow: 0 18px 40px rgba(50, 50, 50, 0.12);
+      padding: 12px;
+      display: none;
+    }
+
+    .dropdown.open .dropdown-menu {
+      display: block;
+    }
+
+    .dropdown-user {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px;
+      border-radius: 14px;
+      background: #FFF3F5;
+      border: 1px solid rgba(255, 182, 193, 0.35);
+    }
+
+    .dropdown-user-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 999px;
+      object-fit: cover;
+      display: none;
+    }
+
+    .dropdown-user-avatar.show {
+      display: block;
+    }
+
+    .dropdown-user-fallback {
+      width: 44px;
+      height: 44px;
+      border-radius: 999px;
+      display: grid;
+      place-items: center;
+      font-weight: 700;
+      color: #c2185b;
+      background: #FFEDEE;
+      border: 1px solid rgba(255, 182, 193, 0.35);
+    }
+
+    .dropdown-user-name {
+      font-weight: 700;
+      color: #62182b;
+      line-height: 1.2;
+    }
+
+    .dropdown-user-handle {
+      color: #ad1457;
+      font-size: 0.9rem;
+    }
+
+    .dropdown-divider {
+      height: 1px;
+      background: rgba(255, 182, 193, 0.35);
+      margin: 12px 4px;
+    }
+
+    .dropdown-menu-item {
+      width: 100%;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      text-align: left;
+      padding: 12px 12px;
+      border-radius: 12px;
+      font-family: inherit;
+      font-weight: 600;
+      color: #62182b;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: background 0.18s;
+    }
+
+    .dropdown-menu-item:hover {
+      background: #FFEDEE;
+    }
+
+    .container {
+      max-width: 1080px;
+      margin: 46px auto 0 auto;
+      padding: 0 20px 60px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .page-title {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 2rem;
+      color: #62182b;
+      letter-spacing: 0.01em;
+    }
+
+    .subtitle {
+      margin: 6px 0 0 0;
+      color: #ad1457;
+      font-weight: 600;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      border: none;
+      cursor: pointer;
+      padding: 12px 18px;
+      border-radius: 999px;
+      font-family: inherit;
+      font-weight: 700;
+      background: rgba(255,255,255,0.8);
+      border: 1.5px solid rgba(248, 187, 208, 0.9);
+      color: #c2185b;
+      box-shadow: 0 2px 12px rgba(255, 182, 193, 0.12);
+    }
+
+    .list {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+      margin-top: 8px;
+    }
+
+    .order-card {
+      background: rgba(255, 255, 255, 0.88);
+      border: 1px solid rgba(255, 182, 193, 0.32);
+      border-radius: 18px;
+      padding: 16px;
+      display: grid;
+      grid-template-columns: 86px 1fr;
+      gap: 14px;
+      box-shadow: 0 10px 26px rgba(50, 50, 50, 0.08);
+    }
+
+    .order-img {
+      width: 86px;
+      height: 86px;
+      border-radius: 16px;
+      background: #FFF3F5;
+      border: 1px solid rgba(255, 182, 193, 0.3);
+      overflow: hidden;
+      display: grid;
+      place-items: center;
+    }
+
+    .order-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .order-name {
+      font-weight: 800;
+      color: #62182b;
+      margin: 0;
+      font-size: 1.1rem;
+    }
+
+    .order-meta {
+      margin-top: 4px;
+      color: #ad1457;
+      font-weight: 650;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: #FFF3F5;
+      border: 1px solid rgba(248, 187, 208, 0.85);
+      color: #c2185b;
+      font-weight: 750;
+      font-size: 0.92rem;
+    }
+
+    .empty {
+      margin-top: 10px;
+      background: rgba(255, 255, 255, 0.86);
+      border: 1px dashed rgba(255, 182, 193, 0.55);
+      border-radius: 18px;
+      padding: 22px;
+      color: #62182b;
+      font-weight: 700;
+    }
+
+    @media (max-width: 600px) {
+      .navbar {
+        flex-direction: column;
+        gap: 10px;
+        padding: 12px 6px;
+      }
+
+      .container {
+        margin-top: 16px;
+        padding: 0 10px 44px 10px;
+      }
+
+      .order-card {
+        grid-template-columns: 72px 1fr;
+      }
+
+      .order-img {
+        width: 72px;
+        height: 72px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="navbar-logo" id="navbarLogo">Vivah</div>
+
+    <div class="navbar-profile">
+      <button class="back-btn" id="backToStore" type="button"><i class="fa-solid fa-arrow-left"></i> Back to Store</button>
+
+      <div class="dropdown" id="profileDropdown">
+        <button class="dropdown-toggle" id="dropdownToggle" aria-haspopup="true" aria-expanded="false" aria-label="Open profile menu">
+          <div class="navbar-profile-avatar" id="navbarProfileAvatar" aria-hidden="true">
+            <img id="navbarProfileImg" alt="" />
+            <span id="navbarProfileText">U</span>
+          </div>
+        </button>
+        <div class="dropdown-menu" id="dropdownMenu" aria-labelledby="dropdownToggle">
+          <div class="dropdown-user" id="menuUser" role="presentation">
+            <img class="dropdown-user-avatar" id="menuUserAvatar" alt="Your profile photo" />
+            <div class="dropdown-user-fallback" id="menuUserFallback" aria-hidden="true">U</div>
+            <div>
+              <div class="dropdown-user-name" id="menuDisplayName">User</div>
+              <div class="dropdown-user-handle" id="menuHandle">@user</div>
+            </div>
+          </div>
+
+          <div class="dropdown-divider" role="presentation"></div>
+
+          <button class="dropdown-menu-item" id="menuStore"><i class="fa-solid fa-bag-shopping"></i> Vivah Store</button>
+          <button class="dropdown-menu-item" id="menuLogout"><i class="fa fa-arrow-right-from-bracket"></i> Logout</button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container">
+    <div class="page-title">
+      <div>
+        <h1>Purchase History</h1>
+        <p class="subtitle">Your Vivah Store orders</p>
+      </div>
+    </div>
+
+    <section class="list" id="orders"></section>
+    <div class="empty" id="empty" style="display:none;"></div>
+  </main>
+
+  <script type="module">
+    import { auth, database } from "./firebase-config.js";
+    import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+    import { ref, get } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
+
+    const ordersEl = document.getElementById('orders');
+    const emptyEl = document.getElementById('empty');
+
+    const dropdown = document.getElementById('profileDropdown');
+    const toggle = document.getElementById('dropdownToggle');
+    const menu = document.getElementById('dropdownMenu');
+
+    const navbarProfileAvatar = document.getElementById('navbarProfileAvatar');
+    const navbarProfileText = document.getElementById('navbarProfileText');
+    const navbarProfileImg = document.getElementById('navbarProfileImg');
+    const menuUserAvatar = document.getElementById('menuUserAvatar');
+    const menuUserFallback = document.getElementById('menuUserFallback');
+    const menuDisplayName = document.getElementById('menuDisplayName');
+    const menuHandle = document.getElementById('menuHandle');
+
+    const menuStore = document.getElementById('menuStore');
+    const menuLogout = document.getElementById('menuLogout');
+
+    function escapeHtml(value) {
+      return String(value || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function normalizeUsername(value) {
+      return (value || '').toString().trim().replace(/^@+/, '');
+    }
+
+    function getFirebaseUser() {
+      try {
+        return JSON.parse(localStorage.getItem('firebaseUser') || 'null');
+      } catch {
+        return null;
+      }
+    }
+
+    function getHandleForUi() {
+      const stored = normalizeUsername(localStorage.getItem('vivah_username'));
+      if (stored) return `@${stored}`;
+
+      const fb = getFirebaseUser();
+      const email = (fb?.email || '').trim();
+      if (email && email.includes('@')) return `@${email.split('@')[0]}`;
+
+      return '@user';
+    }
+
+    function getDisplayNameForUi(handleWithAt) {
+      const lsName = (localStorage.getItem('vivah_name') || '').trim();
+      if (lsName) return lsName;
+
+      const fb = getFirebaseUser();
+      const name = (fb?.displayName || '').trim();
+      if (name) return name;
+
+      const base = normalizeUsername(handleWithAt);
+      return base || 'User';
+    }
+
+    function getInitials(text) {
+      const cleaned = (text || '').toString().trim();
+      if (!cleaned) return 'U';
+      const parts = cleaned.split(/\s+/).filter(Boolean);
+      if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+      return (parts[0][0] + parts[1][0]).toUpperCase();
+    }
+
+    function applyProfileUi() {
+      const handle = getHandleForUi();
+      const displayName = getDisplayNameForUi(handle);
+      const initials = getInitials(displayName);
+
+      if (menuHandle) menuHandle.textContent = handle;
+      if (menuDisplayName) menuDisplayName.textContent = displayName;
+      if (navbarProfileText) navbarProfileText.textContent = initials;
+      if (menuUserFallback) menuUserFallback.textContent = initials;
+
+      const dpUrl = localStorage.getItem('dpUrl');
+      if (dpUrl && navbarProfileAvatar && navbarProfileImg) {
+        navbarProfileImg.src = dpUrl;
+        navbarProfileAvatar.classList.add('has-photo');
+      }
+
+      if (dpUrl && menuUserAvatar) {
+        menuUserAvatar.src = dpUrl;
+        menuUserAvatar.classList.add('show');
+        if (menuUserFallback) menuUserFallback.style.display = 'none';
+      }
+    }
+
+    function formatMoneyInr(amount) {
+      const n = Number(amount) || 0;
+      return `₹${n.toLocaleString('en-IN')}`;
+    }
+
+    function formatDateTime(value) {
+      const raw = (value || '').toString();
+      const d = raw ? new Date(raw) : null;
+      if (!d || Number.isNaN(d.getTime())) return '';
+      return d.toLocaleString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+    }
+
+    function hashToInt(input) {
+      const s = String(input || '');
+      let h = 0;
+      for (let i = 0; i < s.length; i++) {
+        h = (h * 31 + s.charCodeAt(i)) >>> 0;
+      }
+      return h;
+    }
+
+    function getDummyDeliveryDays(orderKey, itemId) {
+      const h = hashToInt(`${orderKey || ''}:${itemId || ''}`);
+      return (h % 7) + 1; // 1..7 days
+    }
+
+    function renderEmpty(message) {
+      if (!emptyEl || !ordersEl) return;
+      ordersEl.innerHTML = '';
+      emptyEl.style.display = 'block';
+      emptyEl.textContent = message;
+    }
+
+    function renderOrders(list) {
+      if (!ordersEl || !emptyEl) return;
+      emptyEl.style.display = 'none';
+
+      const items = Array.isArray(list) ? list : [];
+      if (items.length === 0) {
+        renderEmpty('No purchases yet.');
+        return;
+      }
+
+      ordersEl.innerHTML = items.map((o) => {
+        const key = o?.key || '';
+        const item = o?.item || {};
+        const name = (item?.name || 'Item').toString();
+        const amount = formatMoneyInr(o?.amount ?? item?.price ?? 0);
+        const purchasedAt = formatDateTime(o?.createdAt);
+        const img = (item?.img || '').toString();
+        const deliveryDays = getDummyDeliveryDays(key, item?.id);
+
+        return `
+          <article class="order-card">
+            <div class="order-img">${img ? `<img src="${escapeHtml(img)}" alt="${escapeHtml(name)}" />` : '<i class="fa-solid fa-bag-shopping" style="color:#c2185b;"></i>'}</div>
+            <div>
+              <p class="order-name">${escapeHtml(name)}</p>
+              <div class="order-meta">
+                <span class="pill"><i class="fa-solid fa-indian-rupee-sign"></i> ${escapeHtml(amount)}</span>
+                ${purchasedAt ? `<span class="pill"><i class="fa-regular fa-calendar"></i> ${escapeHtml(purchasedAt)}</span>` : ''}
+                <span class="pill"><i class="fa-solid fa-truck"></i> Arriving in ${deliveryDays} day${deliveryDays === 1 ? '' : 's'}</span>
+              </div>
+            </div>
+          </article>
+        `;
+      }).join('');
+    }
+
+    async function loadOrdersForUid(uid) {
+      const snap = await get(ref(database, `Store purchase/${uid}`));
+      if (!snap.exists()) return [];
+      const val = snap.val() || {};
+      const items = Object.entries(val)
+        .map(([key, order]) => ({ key, ...(order || {}) }))
+        .filter((x) => x && typeof x === 'object');
+
+      items.sort((a, b) => {
+        const ta = Date.parse(String(a?.createdAt || '')) || 0;
+        const tb = Date.parse(String(b?.createdAt || '')) || 0;
+        return tb - ta;
+      });
+
+      return items;
+    }
+
+    // Dropdown open/close
+    if (dropdown && toggle && menu) {
+      toggle.addEventListener('click', function(e) {
+        e.stopPropagation();
+        dropdown.classList.toggle('open');
+        toggle.setAttribute('aria-expanded', dropdown.classList.contains('open'));
+      });
+      document.addEventListener('click', function(e) {
+        if (!dropdown.contains(e.target)) {
+          dropdown.classList.remove('open');
+          toggle.setAttribute('aria-expanded', 'false');
+        }
+      });
+      toggle.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+          dropdown.classList.remove('open');
+          toggle.setAttribute('aria-expanded', 'false');
+        }
+      });
+
+      if (menuStore) {
+        menuStore.addEventListener('click', function() {
+          window.location.href = 'VivahStore.html';
+        });
+      }
+
+      if (menuLogout) {
+        menuLogout.addEventListener('click', async function() {
+          try { await signOut(auth); } catch {}
+          localStorage.removeItem('firebaseUser');
+          localStorage.removeItem('authProvider');
+          try {
+            const keys = [];
+            for (let i = 0; i < localStorage.length; i++) {
+              const k = localStorage.key(i);
+              if (k) keys.push(k);
+            }
+            keys
+              .filter((k) => /^sb-.*-auth-token$/.test(k))
+              .forEach((k) => localStorage.removeItem(k));
+          } catch {}
+          window.location.href = 'index.html';
+        });
+      }
+    }
+
+    const navbarLogo = document.getElementById('navbarLogo');
+    if (navbarLogo) navbarLogo.addEventListener('click', () => (window.location.href = 'index.html'));
+
+    const backToStore = document.getElementById('backToStore');
+    if (backToStore) backToStore.addEventListener('click', () => (window.location.href = 'VivahStore.html'));
+
+    applyProfileUi();
+
+    onAuthStateChanged(auth, async (user) => {
+      applyProfileUi();
+      if (!user?.uid) {
+        renderEmpty('Please login to see your purchase history.');
+        return;
+      }
+
+      try {
+        const list = await loadOrdersForUid(String(user.uid));
+        renderOrders(list);
+      } catch (e) {
+        console.warn(e);
+        renderEmpty('Failed to load purchase history.');
+      }
+    });
+  </script>
+</body>
+</html>

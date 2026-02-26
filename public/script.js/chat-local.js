@@ -91,6 +91,10 @@ function readRecents() {
       to: String(item?.to || "").trim(),
       name: String(item?.name || "").trim(),
       gender: String(item?.gender || "").trim().toLowerCase(),
+      photo: String(item?.photo || "").trim(),
+      location: String(item?.location || "").trim(),
+      profession: String(item?.profession || "").trim(),
+      age: String(item?.age || "").trim(),
       preview: String(item?.preview || "").trim(),
       updatedAt: Number(item?.updatedAt || 0) || 0,
     }))
@@ -103,6 +107,19 @@ function writeRecents(items) {
   localStorage.setItem(RECENTS_KEY, JSON.stringify(safe));
 }
 
+function removeRecentByKey(key) {
+  const items = readRecents();
+  const next = items.filter((x) => recentKey(x) !== key);
+  writeRecents(next);
+}
+
+function clearTargetFromUrl() {
+  const params = new URLSearchParams(window.location.search);
+  ["to", "user", "username", "name", "gender", "photo", "location", "profession", "age"].forEach((k) => params.delete(k));
+  const qs = params.toString();
+  window.history.pushState({}, "", qs ? `${window.location.pathname}?${qs}` : window.location.pathname);
+}
+
 function recentKey(item) {
   return keyify(item?.to || item?.name);
 }
@@ -113,6 +130,10 @@ function upsertRecent(target, patch = {}) {
     to: String(target.to || "").trim(),
     name: String(target.name || target.to || "").trim(),
     gender: String(target.gender || "").trim().toLowerCase(),
+    photo: String(target.photo || "").trim(),
+    location: String(target.location || "").trim(),
+    profession: String(target.profession || "").trim(),
+    age: String(target.age || "").trim(),
   };
   if (!base.to && !base.name) return;
 
@@ -132,6 +153,10 @@ function updateUrlForTarget(target) {
   if (target?.to) params.set("to", target.to);
   if (target?.name) params.set("name", target.name);
   if (target?.gender) params.set("gender", target.gender);
+  if (target?.photo) params.set("photo", target.photo);
+  if (target?.location) params.set("location", target.location);
+  if (target?.profession) params.set("profession", target.profession);
+  if (target?.age) params.set("age", target.age);
   window.history.pushState({}, "", `${window.location.pathname}?${params.toString()}`);
 }
 
@@ -157,12 +182,13 @@ function renderChatList() {
         : `<span class="placeholder">${escapeHtml(avatarLetter(name))}</span>`;
 
       return `
-        <div class="chat-item ${isActive ? "active" : ""}" data-to="${escapeHtml(c.to)}" data-name="${escapeHtml(name)}" data-gender="${escapeHtml(c.gender || "")}">
+        <div class="chat-item ${isActive ? "active" : ""}" data-to="${escapeHtml(c.to)}" data-name="${escapeHtml(name)}" data-gender="${escapeHtml(c.gender || "")}" data-photo="${escapeHtml(c.photo || "")}" data-location="${escapeHtml(c.location || "")}" data-profession="${escapeHtml(c.profession || "")}" data-age="${escapeHtml(c.age || "")}">
           <div class="chat-avatar dp">${avatar}</div>
-          <div style="min-width:0;">
+          <div class="chat-meta" style="min-width:0;flex:1;">
             <div class="name">${escapeHtml(name)}</div>
             <div class="preview">${escapeHtml(preview || "")}</div>
           </div>
+          <button type="button" class="chat-remove" data-action="remove" aria-label="Remove chat" title="Remove chat">×</button>
         </div>`;
     })
     .join("");
@@ -182,6 +208,10 @@ function toChatImagePath(photoPath) {
 
 function findContactPhoto(target) {
   if (!target) return "";
+
+  const direct = toChatImagePath(target?.photo);
+  if (direct) return direct;
+
   const keys = new Set([
     keyify(target.name),
     keyify(target.to),
@@ -222,8 +252,12 @@ function getTargetFromUrl() {
   const to = (params.get("to") || params.get("user") || params.get("username") || "").trim();
   const name = (params.get("name") || "").trim();
   const gender = (params.get("gender") || "").trim().toLowerCase();
+  const photo = (params.get("photo") || params.get("dp") || "").trim();
+  const location = (params.get("location") || "").trim();
+  const profession = (params.get("profession") || "").trim();
+  const age = (params.get("age") || "").trim();
   if (!to) return null;
-  return { to, name: name || to, gender };
+  return { to, name: name || to, gender, photo, location, profession, age };
 }
 
 function resolveReceiverGender(target) {
@@ -404,7 +438,13 @@ function setHeader(ctx) {
 
   if (ctx.target?.name) {
     el.chatTitle.textContent = `Chat with ${ctx.target.name}`;
-    el.chatSubtitle.textContent = "Realtime • Firebase Realtime Database";
+    const infoParts = [];
+    if (ctx.target?.age && /^\d+$/.test(String(ctx.target.age))) infoParts.push(`${ctx.target.age} yrs`);
+    if (ctx.target?.profession) infoParts.push(ctx.target.profession);
+    if (ctx.target?.location) infoParts.push(ctx.target.location);
+
+    const profileLine = infoParts.filter(Boolean).join(" • ");
+    el.chatSubtitle.textContent = profileLine || "Realtime • Firebase Realtime Database";
     return;
   }
 
@@ -596,14 +636,46 @@ async function saveCredentialsAndEnterRoom() {
 
 function wireEvents() {
   el.chatList?.addEventListener("click", async (event) => {
+    const removeBtn = event.target.closest(".chat-remove");
+    if (removeBtn) {
+      event.preventDefault();
+      event.stopPropagation();
+
+      const item = removeBtn.closest(".chat-item");
+      if (!item) return;
+
+      const to = item.getAttribute("data-to") || "";
+      const name = item.getAttribute("data-name") || "";
+      const key = recentKey({ to, name });
+      if (!key) return;
+
+      const ok = window.confirm(`Remove chat with ${name || to || "this user"}?`);
+      if (!ok) return;
+
+      removeRecentByKey(key);
+
+      const isActive = activeTarget && recentKey(activeTarget) === key;
+      if (isActive) {
+        clearTargetFromUrl();
+        await setupRoom();
+      } else {
+        renderChatList();
+      }
+      return;
+    }
+
     const item = event.target.closest(".chat-item");
     if (!item) return;
     const to = item.getAttribute("data-to") || "";
     const name = item.getAttribute("data-name") || "";
     const gender = item.getAttribute("data-gender") || "";
+    const photo = item.getAttribute("data-photo") || "";
+    const location = item.getAttribute("data-location") || "";
+    const profession = item.getAttribute("data-profession") || "";
+    const age = item.getAttribute("data-age") || "";
     if (!to && !name) return;
 
-    updateUrlForTarget({ to, name, gender });
+    updateUrlForTarget({ to, name, gender, photo, location, profession, age });
     await setupRoom();
   });
 

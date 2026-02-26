@@ -194,7 +194,7 @@ function init() {
 
   const params = new URLSearchParams(window.location.search);
   const passedPhoto = params.get("photo");
-  const normalizedPhoto = passedPhoto && /^GirlsImage\//i.test(passedPhoto)
+  const normalizedPhoto = passedPhoto && /^(GirlsImage|Boysimage)\//i.test(passedPhoto)
     ? `../${passedPhoto}`
     : passedPhoto;
   const mainPhoto = normalizedPhoto || girl.profilePhoto || girl.photo || "";

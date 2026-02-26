@@ -674,7 +674,6 @@
           <div class="dropdown-divider" role="presentation"></div>
 
           <button class="dropdown-menu-item" id="menuMyProfile"><i class="fa fa-user"></i> Profile</button>
-          <button class="dropdown-menu-item" id="menuMessages"><i class="fa-regular fa-comment"></i> Comments</button>
           <button class="dropdown-menu-item" id="menuChat"><i class="fa-solid fa-comments"></i> Chat</button>
           <button class="dropdown-menu-item" id="menuStore"><i class="fa-solid fa-bag-shopping"></i> Vivah Store</button>
           <button class="dropdown-menu-item" id="menuVenue"><i class="fa-solid fa-building-columns"></i> Venue Selection</button>
@@ -1172,6 +1171,12 @@
       'pranavreddy',
       'kunaldesai',
       'nikhilkumar',
+      'rahuliyer',
+      'karthikramanan',
+      'mohitjain',
+      'rajatarora',
+      'naveenreddy',
+      'shubhamtiwari',
     ]);
 
     function slugifyName(name) {
@@ -1188,6 +1193,10 @@
         const connectBtn = card.querySelector('.btn-connect');
         if (!nameEl || !connectBtn) return;
 
+        const avatarImg = card.querySelector('.avatar img');
+        const locationEl = card.querySelector('.location');
+        const professionEl = card.querySelector('.profession');
+
         const raw = nameEl.textContent || '';
         const nameOnly = raw.split('•')[0].trim();
         const slug = slugifyName(nameOnly);
@@ -1195,14 +1204,27 @@
 
         connectBtn.addEventListener('click', (e) => {
           e.preventDefault();
+          const photo = (avatarImg?.getAttribute('src') || '').trim();
+          const location = (locationEl?.textContent || '').trim();
+          const profession = (professionEl?.textContent || '').trim();
+          const ageText = (nameEl.querySelector('.meta')?.textContent || '').replace(/[•\s]/g, '').trim();
+          const age = ageText && /^\d+$/.test(ageText) ? ageText : '';
+
           if (KNOWN_BOY_PROFILE_SLUGS.has(slug)) {
-            window.location.href = `30pagesofboys/${slug}.html`;
+            const profileUrl = new URL(`30pagesofboys/${slug}.html`, window.location.href);
+            if (photo) profileUrl.searchParams.set('photo', photo);
+            window.location.href = profileUrl.toString();
             return;
           }
 
           const qs = new URLSearchParams({
-            to: `example-${slug}`,
-            name: nameOnly || `example-${slug}`,
+            to: slug,
+            name: nameOnly || slug,
+            gender: 'male',
+            ...(photo ? { photo } : {}),
+            ...(location ? { location } : {}),
+            ...(profession ? { profession } : {}),
+            ...(age ? { age } : {}),
           });
           window.location.href = `Chat.html?${qs.toString()}`;
         });
@@ -1214,7 +1236,6 @@
     const toggle = document.getElementById('dropdownToggle');
     const menu = document.getElementById('dropdownMenu');
     const myProfileBtn = document.getElementById('menuMyProfile');
-    const menuMessages = document.getElementById('menuMessages');
     const menuChat = document.getElementById('menuChat');
     const menuStore = document.getElementById('menuStore');
     const menuVenue = document.getElementById('menuVenue');
@@ -1451,12 +1472,6 @@
           } catch {}
 
           window.location.href = 'index.html';
-        });
-      }
-
-      if (menuMessages) {
-        menuMessages.addEventListener('click', function() {
-          alert('Comments coming soon');
         });
       }
 
