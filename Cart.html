@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Cart - Vivah Store</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    body{font-family:Poppins,Arial,sans-serif;background:#fff7f7;margin:0;padding:20px}
+    .container{max-width:920px;margin:28px auto;background:#fff;border-radius:12px;padding:18px}
+    h1{color:#62182b}
+    .item{display:flex;justify-content:space-between;align-items:center;padding:10px;border-bottom:1px solid #f1d7dd}
+    .meta{color:#ad1457}
+    .total{display:flex;justify-content:space-between;align-items:center;padding:12px 0}
+    .btn{background:#E34450;color:#fff;border:none;padding:12px 14px;border-radius:8px;cursor:pointer}
+    .btn-muted{background:#fff;border:1px solid #ddd;padding:10px;border-radius:8px;cursor:pointer}
+  </style>
+</head>
+<body>
+  <main class="container">
+    <h1>Your Cart</h1>
+    <div id="items"></div>
+    <div id="empty" style="color:#62182b;padding:12px">Your cart is empty</div>
+    <div class="total" style="display:none;" id="totalRow">
+      <strong>Total: <span id="totalAmount">₹0</span></strong>
+      <div>
+        <button id="continueShopping" class="btn-muted">Continue Shopping</button>
+        <button id="checkout" class="btn">Checkout</button>
+      </div>
+    </div>
+  </main>
+
+  <!-- Razorpay checkout + payment-integration must be available -->
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <script src="payment-integration.js"></script>
+
+  <script>
+    const CART_KEY = 'vivah_store_cart_v1';
+    function safeJsonParse(raw, fallback){try{return JSON.parse(raw);}catch{return fallback;}}
+    function readCart(){const parsed = safeJsonParse(localStorage.getItem(CART_KEY)||'[]',[]);return Array.isArray(parsed)?parsed:[]}
+    function writeCart(items){localStorage.setItem(CART_KEY,JSON.stringify(Array.isArray(items)?items:[]))}
+
+    const itemsEl = document.getElementById('items');
+    const emptyEl = document.getElementById('empty');
+    const totalRow = document.getElementById('totalRow');
+    const totalAmount = document.getElementById('totalAmount');
+    const checkoutBtn = document.getElementById('checkout');
+    const continueBtn = document.getElementById('continueShopping');
+
+    function render(){
+      const cart = readCart();
+      if(!cart || cart.length===0){ itemsEl.innerHTML=''; emptyEl.style.display='block'; totalRow.style.display='none'; return }
+      emptyEl.style.display='none'; totalRow.style.display='flex';
+      itemsEl.innerHTML = '';
+      let total = 0;
+      cart.forEach((it)=>{
+        const row = document.createElement('div'); row.className='item';
+        row.innerHTML = `<div><strong>${it.name}</strong><div class="meta">₹${it.price} × ${it.qty}</div></div><div><button data-id="${it.id}" class="btn-muted remove">Remove</button></div>`;
+        itemsEl.appendChild(row);
+        total += (Number(it.price)||0)*(Number(it.qty)||1);
+      });
+      totalAmount.textContent = '₹'+total;
+      Array.from(itemsEl.querySelectorAll('.remove')).forEach(btn=>btn.addEventListener('click',()=>{
+        const id = btn.dataset.id; const c = readCart().filter(x=>x.id!==id); writeCart(c); render();
+      }));
+    }
+
+    continueBtn.addEventListener('click',()=>{ window.location.href='VivahStoremain.html' });
+
+    checkoutBtn.addEventListener('click', async ()=>{
+      const cart = readCart(); if(!cart || cart.length===0){ alert('Cart empty'); return }
+      const total = cart.reduce((s,i)=>s+(Number(i.price)||0)*(Number(i.qty)||1),0);
+      try{
+        if(!window.startPayment) throw new Error('payment integration not ready');
+        const fb = (function(){try{return JSON.parse(localStorage.getItem('firebaseUser')||'null')}catch{return null}})();
+        const email = (fb?.email||'').toString().trim();
+        const phone = (fb?.phone||'').toString().trim();
+        await window.startPayment({ amount: total, name: 'Vivah Store Order', email, phone, successRedirectUrl: 'MyBookings.html' });
+      }catch(e){
+        console.warn('Checkout failed',e); alert('Unable to start payment. Please try again.')
+      }
+    });
+
+    render();
+  </script>
+</body>
+</html>
