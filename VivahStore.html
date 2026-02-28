@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,7 +15,7 @@
       margin: 0;
       padding: 0;
       font-family: 'Poppins', Inter, Arial, sans-serif;
-      background: linear-gradient(135deg, #ffe5ec 0%, #fff1f7 40%, #f7f7ff 100%);
+      background: linear-gradient(90deg, #f8bbd0 0%, #fff 80%);
       min-height: 100vh;
       color: #22232A;
     }
@@ -27,7 +28,7 @@
       justify-content: space-between;
       padding: 18px 34px;
       box-sizing: border-box;
-      background: rgba(255, 255, 255, 0.82);
+      background: transparent;
       backdrop-filter: blur(14px);
       border-bottom: 1px solid rgba(255, 182, 193, 0.35);
       position: sticky;
@@ -35,12 +36,14 @@
       z-index: 50;
     }
     .navbar-logo {
-      font-size: 1.55rem;
+      font-size: 2.8rem;
+      text-shadow: 0 4px 18px rgba(230, 57, 70, 0.18), 0 1px 2px rgba(0,0,0,0.12);
       font-weight: 700;
       color: #e63946;
       letter-spacing: 0.02em;
       cursor: pointer;
       user-select: none;
+      font-family: 'Brush Script MT', cursive, 'Poppins', Inter, Arial, sans-serif;
     }
 
     .navbar-profile {
@@ -129,8 +132,8 @@
     }
 
     .navbar-profile-avatar {
-      width: 44px;
-      height: 44px;
+      width: 56px;
+      height: 56px;
       border-radius: 999px;
       background: #FFF3F5;
       border: 1.5px solid #f8bbd0;
@@ -313,8 +316,8 @@
       width: 100%;
     }
     .avatar {
-      width: 92px;
-      height: 92px;
+      width: 160px;
+      height: 160px;
       border-radius: 50%;
       overflow: hidden;
       border: 3px solid #FFEDEE;
@@ -325,7 +328,7 @@
     .avatar img {
       width: 100%;
       height: 100%;
-      object-fit: cover;
+      object-fit: contain;
       display: block;
     }
     .name {
@@ -367,7 +370,12 @@
       gap: 18px;
       margin-top: 18px;
       width: 100%;
-      justify-content: center;
+      justify-content: stretch;
+    }
+
+    .actions .btn {
+      flex: 1;
+      min-width: 0;
     }
 
     .btn {
@@ -392,6 +400,7 @@
 
     /* Reuse Matches button palettes */
     .btn-cart {
+      display: none;
       background: #FFF3F5;
       color: #c2185b;
       border: 1.5px solid #f8bbd0;
@@ -409,6 +418,8 @@
       color: #c2185b;
       border: 1.5px solid #f8bbd0;
       box-shadow: 0 2px 12px #ffe5ec80;
+      padding: 14px 28px;
+      font-size: 1.12rem;
     }
     .btn-buy:hover {
       background: #FFEDEE;
@@ -462,18 +473,11 @@
     <div class="navbar-logo" id="navbarLogo">Vivah</div>
 
     <div class="navbar-profile">
-      <div class="navbar-heart" id="navbarHeart">
-        <button class="navbar-heart-btn" id="navbarHeartBtn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Notifications">
-          <i class="fa-regular fa-heart" aria-hidden="true"></i>
+      <div class="navbar-heart" id="navbarOrders">
+        <button class="navbar-heart-btn" id="navbarOrdersBtn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Order history">
+          <i class="fa-solid fa-clock-rotate-left" aria-hidden="true"></i>
         </button>
-        <span class="navbar-heart-badge" id="navbarHeartBadge" style="display:none;">1</span>
-
-        <div class="heart-menu" id="navbarHeartMenu" role="menu" aria-label="Notifications">
-          <button class="heart-like-row" type="button" id="heartLikes" aria-label="Profile likes">
-            <i class="fa-solid fa-heart" aria-hidden="true"></i>
-            <span id="heartLikesCount">0</span>
-          </button>
-        </div>
+        <span class="navbar-heart-badge" id="navbarOrdersBadge" style="display:none;">1</span>
       </div>
 
       <div class="dropdown" id="profileDropdown">
@@ -518,7 +522,7 @@
     <section class="matches-grid" aria-label="Store products">
       <article class="card" data-id="sherwani" data-name="Royal Sherwani" data-price="3499">
         <div class="card-head">
-          <div class="avatar"><img src="images/sem6matrimonialimg.png" alt="Royal Sherwani"></div>
+            <div class="avatar"><img src="shopping/Royal Sherwani.webp" alt="Royal Sherwani (zoomed out)"></div>
           <div>
             <div class="name">Royal Sherwani <span class="meta">• ₹3,499</span></div>
             <div class="location">Free delivery</div>
@@ -534,8 +538,13 @@
 
       <article class="card" data-id="lehenga" data-name="Bridal Lehenga" data-price="5999">
         <div class="card-head">
-          <div class="avatar"><img src="images/littleheart3.jpg" alt="Bridal Lehenga"></div>
+          <div class="avatar"><img src="shopping/Bridal Lehenga.jpg" alt="Bridal Lehenga"></div>
           <div>
+            <!-- Zoom Modal for Bridal Lehenga -->
+            <div id="lehengaZoomModal" style="display:none;position:fixed;z-index:9999;left:0;top:0;width:100vw;height:100vh;background:rgba(0,0,0,0.7);align-items:center;justify-content:center;">
+              <span id="lehengaZoomClose" style="position:absolute;top:30px;right:50px;font-size:2.5rem;color:#fff;cursor:pointer;font-weight:bold;z-index:10001;">&times;</span>
+              <img src="shopping/Bridal Lehenga.jpg" alt="Bridal Lehenga Zoomed" style="max-width:80vw;max-height:80vh;border-radius:18px;box-shadow:0 8px 40px #0007;display:block;">
+            </div>
             <div class="name">Bridal Lehenga <span class="meta">• ₹5,999</span></div>
             <div class="location">Free delivery</div>
             <div class="profession">Bridal Wear</div>
@@ -550,8 +559,9 @@
 
       <article class="card" data-id="saree" data-name="Kanjivaram Saree" data-price="4299">
         <div class="card-head">
-          <div class="avatar"><img src="images/littleheart5.jpg" alt="Kanjivaram Saree"></div>
+          <div class="avatar"><img src="shopping/Kanjivaram Saree.jpg" alt="Kanjivaram Saree"></div>
           <div>
+            <div style="font-size:1.1rem;font-weight:600;color:#b71c1c;text-align:center;margin-bottom:4px;">Kanjivaram Saree</div>
             <div class="name">Kanjivaram Saree <span class="meta">• ₹4,299</span></div>
             <div class="location">Free delivery</div>
             <div class="profession">Wedding Saree</div>
@@ -566,7 +576,8 @@
 
       <article class="card" data-id="tuxedo" data-name="Reception Tuxedo" data-price="4999">
         <div class="card-head">
-          <div class="avatar"><img src="images/Male.png" alt="Reception Tuxedo"></div>
+          <div class="avatar"><img src="shopping/Reception Tuxedo.jpeg" alt="Reception Tuxedo"></div>
+          <div style="font-size:1.1rem;font-weight:600;color:#1a237e;text-align:center;margin-bottom:4px;">Reception Tuxedo</div>
           <div>
             <div class="name">Reception Tuxedo <span class="meta">• ₹4,999</span></div>
             <div class="location">Free delivery</div>
@@ -582,8 +593,8 @@
 
       <article class="card" data-id="jewelry" data-name="Bridal Jewelry Set" data-price="2799">
         <div class="card-head">
-          <div class="avatar"><img src="images/Female.png" alt="Bridal Jewelry Set"></div>
-          <div>
+          <div class="avatar"><img src="shopping/Bridal Jewelry Set.jpeg" alt="Bridal Jewelry Set"></div>
+          <div style="font-size:1.1rem;font-weight:600;color:#b71c1c;text-align:center;margin-bottom:4px;">Bridal Jewelry Set</div>
             <div class="name">Bridal Jewelry Set <span class="meta">• ₹2,799</span></div>
             <div class="location">Free delivery</div>
             <div class="profession">Accessories</div>
@@ -598,8 +609,8 @@
 
       <article class="card" data-id="footwear" data-name="Wedding Footwear" data-price="1499">
         <div class="card-head">
-          <div class="avatar"><img src="images/littleheart4.jpg" alt="Wedding Footwear"></div>
-          <div>
+          <div class="avatar"><img src="shopping/Wedding Footwear.jpeg" alt="Wedding Footwear"></div>
+          <div style="font-size:1.1rem;font-weight:600;color:#4e342e;text-align:center;margin-bottom:4px;">Wedding Footwear</div>
             <div class="name">Wedding Footwear <span class="meta">• ₹1,499</span></div>
             <div class="location">Free delivery</div>
             <div class="profession">Footwear</div>
@@ -614,8 +625,8 @@
 
       <article class="card" data-id="kurta" data-name="Designer Kurta Set" data-price="2499">
         <div class="card-head">
-          <div class="avatar"><img src="images/Male.png" alt="Designer Kurta Set"></div>
-          <div>
+          <div class="avatar"><img src="shopping/Designer Kurta Set.webp" alt="Designer Kurta Set"></div>
+          <div style="font-size:1.1rem;font-weight:600;color:#1b5e20;text-align:center;margin-bottom:4px;">Designer Kurta Set</div>
             <div class="name">Designer Kurta Set <span class="meta">• ₹2,499</span></div>
             <div class="location">Free delivery</div>
             <div class="profession">Groom Wear</div>
@@ -630,7 +641,8 @@
 
       <article class="card" data-id="dupatta" data-name="Bridal Dupatta" data-price="899">
         <div class="card-head">
-          <div class="avatar"><img src="images/littleheart3.jpg" alt="Bridal Dupatta"></div>
+          <div class="avatar"><img src="shopping/Bridal Dupatta.jpeg" alt="Bridal Dupatta"></div>
+          <div style="font-size:1.1rem;font-weight:600;color:#ad1457;text-align:center;margin-bottom:4px;">Bridal Dupatta</div>
           <div>
             <div class="name">Bridal Dupatta <span class="meta">• ₹899</span></div>
             <div class="location">Free delivery</div>
@@ -646,7 +658,8 @@
 
       <article class="card" data-id="safa" data-name="Groom Safa (Turban)" data-price="699">
         <div class="card-head">
-          <div class="avatar"><img src="images/sem6matrimonialimg.png" alt="Groom Safa (Turban)"></div>
+          <div class="avatar"><img src="shopping/Groom Safa (Turban).jpeg" alt="Groom Safa (Turban)"></div>
+          <div style="font-size:1.1rem;font-weight:600;color:#ad1457;text-align:center;margin-bottom:4px;">Groom Safa (Turban)</div>
           <div>
             <div class="name">Groom Safa (Turban) <span class="meta">• ₹699</span></div>
             <div class="location">Free delivery</div>
@@ -662,7 +675,8 @@
 
       <article class="card" data-id="bangles" data-name="Mehendi Bangles Set" data-price="1299">
         <div class="card-head">
-          <div class="avatar"><img src="images/Female.png" alt="Mehendi Bangles Set"></div>
+          <div class="avatar"><img src="shopping/Mehendi Bangles Set.jpeg" alt="Mehendi Bangles Set"></div>
+          <div style="font-size:1.1rem;font-weight:600;color:#b71c1c;text-align:center;margin-bottom:4px;">Mehendi Bangles Set</div>
           <div>
             <div class="name">Mehendi Bangles Set <span class="meta">• ₹1,299</span></div>
             <div class="location">Free delivery</div>
@@ -678,7 +692,8 @@
 
       <article class="card" data-id="gown" data-name="Reception Gown" data-price="5499">
         <div class="card-head">
-          <div class="avatar"><img src="images/littleheart5.jpg" alt="Reception Gown"></div>
+          <div class="avatar"><img src="shopping/Reception Gown.jpeg" alt="Reception Gown"></div>
+          <div style="font-size:1.1rem;font-weight:600;color:#6a1b9a;text-align:center;margin-bottom:4px;">Reception Gown</div>
           <div>
             <div class="name">Reception Gown <span class="meta">• ₹5,499</span></div>
             <div class="location">Free delivery</div>
@@ -694,7 +709,8 @@
 
       <article class="card" data-id="stole" data-name="Embroidered Stole" data-price="999">
         <div class="card-head">
-          <div class="avatar"><img src="images/littleheart4.jpg" alt="Embroidered Stole"></div>
+          <div class="avatar"><img src="shopping/Embroidered Stole.webp" alt="Embroidered Stole"></div>
+          <div style="font-size:1.1rem;font-weight:600;color:#4e342e;text-align:center;margin-bottom:4px;">Embroidered Stole</div>
           <div>
             <div class="name">Embroidered Stole <span class="meta">• ₹999</span></div>
             <div class="location">Free delivery</div>
@@ -713,7 +729,8 @@
   <script type="module">
     import { auth, database } from "./firebase-config.js";
     import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
-    import { ref, get } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
+    import { ref, get, push, set, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
+    import { RAZORPAY_KEY_ID, loadRazorpayScript } from "./razorpay-config.js";
 
     // Dropdown open/close logic with outside click (copied pattern from Matches.html)
     const dropdown = document.getElementById('profileDropdown');
@@ -733,38 +750,47 @@
     const menuUserFallback = document.getElementById('menuUserFallback');
     const menuDisplayName = document.getElementById('menuDisplayName');
     const menuHandle = document.getElementById('menuHandle');
-    const navbarHeart = document.getElementById('navbarHeart');
-    const navbarHeartBtn = document.getElementById('navbarHeartBtn');
-    const navbarHeartBadge = document.getElementById('navbarHeartBadge');
-    const heartLikesCount = document.getElementById('heartLikesCount');
+    const navbarOrders = document.getElementById('navbarOrders');
+    const navbarOrdersBtn = document.getElementById('navbarOrdersBtn');
+    const navbarOrdersBadge = document.getElementById('navbarOrdersBadge');
+    let currentUid = '';
 
-    const PROFILE_LIKES_KEY = 'vivah_profileLikes';
-    const PROFILE_LIKES_UNREAD_KEY = 'vivah_profileLikesUnread';
-
-    function getInt(key, fallback) {
-      const raw = localStorage.getItem(key);
-      const n = parseInt(raw || '', 10);
-      return Number.isFinite(n) ? n : fallback;
+    function setOrdersBadge(count) {
+      if (!navbarOrdersBadge) return;
+      const n = Number(count) || 0;
+      if (n > 0) {
+        navbarOrdersBadge.style.display = 'inline-flex';
+        navbarOrdersBadge.textContent = String(Math.min(n, 99));
+        navbarOrdersBadge.setAttribute('aria-label', `${n} order${n === 1 ? '' : 's'}`);
+      } else {
+        navbarOrdersBadge.style.display = 'none';
+        navbarOrdersBadge.textContent = '';
+      }
     }
 
-    function setLikesUnread(isUnread) {
-      localStorage.setItem(PROFILE_LIKES_UNREAD_KEY, isUnread ? '1' : '0');
+    async function fetchOrdersForUid(uid) {
+      if (!uid) return [];
+      const snap = await get(ref(database, `Store purchase/${uid}`));
+      if (!snap.exists()) return [];
+      const val = snap.val() || {};
+      const items = Object.entries(val)
+        .map(([key, order]) => ({ key, ...(order || {}) }))
+        .filter((x) => x && typeof x === 'object');
+      items.sort((a, b) => {
+        const ta = Date.parse(String(a?.createdAt || '')) || 0;
+        const tb = Date.parse(String(b?.createdAt || '')) || 0;
+        return tb - ta;
+      });
+      return items;
     }
 
-    function updateHeartUi() {
-      const likes = getInt(PROFILE_LIKES_KEY, 0);
-      const unread = localStorage.getItem(PROFILE_LIKES_UNREAD_KEY) === '1';
-
-      if (heartLikesCount) heartLikesCount.textContent = String(likes);
-
-      if (navbarHeartBadge) {
-        if (unread && likes > 0) {
-          navbarHeartBadge.style.display = 'inline-flex';
-          navbarHeartBadge.textContent = '';
-          navbarHeartBadge.setAttribute('aria-label', `${likes} new like${likes === 1 ? '' : 's'}`);
-        } else {
-          navbarHeartBadge.style.display = 'none';
-        }
+    async function refreshOrders() {
+      try {
+        const items = await fetchOrdersForUid(currentUid);
+        setOrdersBadge(items.length);
+      } catch (e) {
+        console.warn('Order history load failed:', e);
+        setOrdersBadge(0);
       }
     }
 
@@ -850,7 +876,9 @@
 
     applyProfileUi();
     onAuthStateChanged(auth, (user) => {
+      currentUid = user?.uid ? String(user.uid) : '';
       if (user?.uid) fetchEditProfileFromFirebase(user.uid);
+      refreshOrders();
     });
 
     window.addEventListener('storage', (e) => {
@@ -859,32 +887,9 @@
       }
     });
 
-    updateHeartUi();
-
-    if (navbarHeart && navbarHeartBtn) {
-      navbarHeartBtn.addEventListener('click', function(e) {
-        e.stopPropagation();
-        const willOpen = !navbarHeart.classList.contains('open');
-        navbarHeart.classList.toggle('open');
-        navbarHeartBtn.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
-        if (willOpen) {
-          setLikesUnread(false);
-          updateHeartUi();
-        }
-      });
-
-      document.addEventListener('click', function(e) {
-        if (!navbarHeart.contains(e.target)) {
-          navbarHeart.classList.remove('open');
-          navbarHeartBtn.setAttribute('aria-expanded', 'false');
-        }
-      });
-
-      document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') {
-          navbarHeart.classList.remove('open');
-          navbarHeartBtn.setAttribute('aria-expanded', 'false');
-        }
+    if (navbarOrdersBtn) {
+      navbarOrdersBtn.addEventListener('click', function() {
+        window.location.href = 'PurchaseHistory.html';
       });
     }
 
@@ -972,42 +977,21 @@
       }
     }
 
-    const CART_KEY = 'vivah_store_cart_v1';
-    const BUY_NOW_KEY = 'vivah_store_buyNow_v1';
-
-    function safeJsonParse(raw, fallback) {
-      try {
-        return JSON.parse(raw);
-      } catch {
-        return fallback;
-      }
-    }
-
-    function readCart() {
-      const parsed = safeJsonParse(localStorage.getItem(CART_KEY) || '[]', []);
-      return Array.isArray(parsed) ? parsed : [];
-    }
-
-    function writeCart(items) {
-      localStorage.setItem(CART_KEY, JSON.stringify(Array.isArray(items) ? items : []));
-    }
-
-    function addToCart(item) {
-      const cart = readCart();
-      const existing = cart.find((x) => x && x.id === item.id);
-      if (existing) {
-        existing.qty = (existing.qty || 1) + 1;
-      } else {
-        cart.push({ ...item, qty: 1 });
-      }
-      writeCart(cart);
+    function escapeHtml(value) {
+      return String(value || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
     }
 
     function getItemFromCard(card) {
       const id = card?.dataset?.id || '';
       const name = card?.dataset?.name || '';
       const price = Number(card?.dataset?.price || 0);
-      return { id, name, price };
+      const img = card?.querySelector('img')?.getAttribute('src') || '';
+      return { id, name, price, img };
     }
 
     function flashButton(button, text) {
@@ -1022,28 +1006,132 @@
       }, 850);
     }
 
+    async function saveStorePurchaseToFirebaseRTDB({ uid, item, amount, currency, prefill, razorpay }) {
+      if (!uid) return;
+
+      const record = {
+        uid: String(uid),
+        item: {
+          id: String(item?.id || ''),
+          name: String(item?.name || ''),
+          price: Number(item?.price || 0),
+          img: String(item?.img || ''),
+        },
+        amount: Number(amount) || 0,
+        currency: String(currency || 'INR'),
+        customer: {
+          name: (prefill?.name || '').toString().trim() || null,
+          email: (prefill?.email || '').toString().trim() || null,
+          phone: (prefill?.contact || '').toString().trim() || null,
+        },
+        razorpay: {
+          paymentId: String(razorpay?.paymentId || ''),
+          orderId: String(razorpay?.orderId || ''),
+          signature: String(razorpay?.signature || ''),
+        },
+        status: 'success',
+        page: (typeof location !== 'undefined' ? location.href : ''),
+        createdAt: new Date().toISOString(),
+        createdAtServer: serverTimestamp(),
+      };
+
+      const paymentId = record.razorpay.paymentId;
+      const safeKey = /^[A-Za-z0-9_-]+$/.test(paymentId || '') ? paymentId : '';
+      const perUserBase = ref(database, `Store purchase/${uid}`);
+      const perUserRef = safeKey ? ref(database, `Store purchase/${uid}/${safeKey}`) : push(perUserBase);
+      await set(perUserRef, record);
+    }
+
+    function getCustomerPrefillForRazorpay() {
+      const fb = getFirebaseUser();
+      const name = (localStorage.getItem('vivah_name') || fb?.displayName || '').toString().trim();
+      const email = (fb?.email || '').toString().trim();
+      const phone = (localStorage.getItem('vivah_phone') || fb?.phoneNumber || '').toString().trim();
+      return { name, email, contact: phone };
+    }
+
+    async function startStorePurchase(item, button) {
+      if (!item?.id || !item?.name || !Number(item?.price)) {
+        alert('Invalid item');
+        return;
+      }
+
+      if (!auth?.currentUser?.uid) {
+        alert('Please login to purchase');
+        window.location.href = 'login.html';
+        return;
+      }
+
+      const uid = String(auth.currentUser.uid);
+      const prefill = getCustomerPrefillForRazorpay();
+
+      try {
+        if (button) flashButton(button, 'Opening...');
+        if (!window.Razorpay) await loadRazorpayScript();
+        if (!window.Razorpay) throw new Error('Razorpay SDK not available');
+
+        const options = {
+          key: RAZORPAY_KEY_ID,
+          amount: Math.round(Number(item.price) * 100),
+          currency: 'INR',
+          name: 'Vivah Store',
+          description: String(item.name),
+          notes: {
+            itemId: String(item.id),
+            itemName: String(item.name),
+            itemPrice: String(item.price),
+          },
+          prefill: {
+            name: prefill.name,
+            email: prefill.email,
+            contact: prefill.contact,
+          },
+          theme: { color: '#E34450' },
+          handler: function (response) {
+            (async () => {
+              await saveStorePurchaseToFirebaseRTDB({
+                uid,
+                item,
+                amount: Number(item.price) || 0,
+                currency: 'INR',
+                prefill: options.prefill,
+                razorpay: {
+                  paymentId: response?.razorpay_payment_id || '',
+                  orderId: response?.razorpay_order_id || '',
+                  signature: response?.razorpay_signature || '',
+                },
+              });
+              await refreshOrders();
+            })()
+              .catch((e) => console.warn('Store purchase save failed:', e))
+              .finally(() => {
+                alert('Purchase successful! Payment ID: ' + (response?.razorpay_payment_id || ''));
+              });
+          },
+          modal: {
+            ondismiss: function () {
+              // user closed
+            }
+          }
+        };
+
+        const rzp = new window.Razorpay(options);
+        rzp.open();
+      } catch (e) {
+        console.warn(e);
+        alert('Payment failed to start');
+      }
+    }
+
     function wireStoreCards() {
       const cards = Array.from(document.querySelectorAll('.matches-grid .card'));
       cards.forEach((card) => {
-        const cartBtn = card.querySelector('[data-action="cart"]');
         const buyBtn = card.querySelector('[data-action="buy"]');
-
-        if (cartBtn) {
-          cartBtn.addEventListener('click', () => {
-            const item = getItemFromCard(card);
-            addToCart(item);
-            flashButton(cartBtn, 'Added');
-          });
-        }
-
-        if (buyBtn) {
-          buyBtn.addEventListener('click', () => {
-            const item = getItemFromCard(card);
-            addToCart(item);
-            localStorage.setItem(BUY_NOW_KEY, JSON.stringify({ ...item, ts: Date.now() }));
-            window.location.href = 'Payment.html';
-          });
-        }
+        if (!buyBtn) return;
+        buyBtn.addEventListener('click', () => {
+          const item = getItemFromCard(card);
+          startStorePurchase(item, buyBtn);
+        });
       });
     }
 
@@ -1059,6 +1147,26 @@
         window.location.href = 'index.html';
       });
     }
+  </script>
+  <script>
+    // Bridal Lehenga Zoom Feature
+    document.addEventListener('DOMContentLoaded', function() {
+      const lehengaImg = document.querySelector('.card[data-id="lehenga"] .avatar img');
+      const modal = document.getElementById('lehengaZoomModal');
+      const closeBtn = document.getElementById('lehengaZoomClose');
+      if (lehengaImg && modal && closeBtn) {
+        lehengaImg.style.cursor = 'zoom-in';
+        lehengaImg.addEventListener('click', function() {
+          modal.style.display = 'flex';
+        });
+        closeBtn.addEventListener('click', function() {
+          modal.style.display = 'none';
+        });
+        modal.addEventListener('click', function(e) {
+          if (e.target === modal) modal.style.display = 'none';
+        });
+      }
+    });
   </script>
 </body>
 </html>

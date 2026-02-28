@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link href="https://fonts.googleapis.com/css2?family=Brush+Script+MT&display=swap" rel="stylesheet">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Upgrade to Premium – Venue Selection</title>
@@ -10,7 +11,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 
-  <!-- Razorpay Checkout.js -->
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   <script src="payment-integration.js"></script>
 
@@ -33,40 +33,34 @@
       justify-content: space-between;
       padding: 18px 34px;
       box-sizing: border-box;
-      background: rgba(255, 255, 255, 0.82);
-      backdrop-filter: blur(14px);
-      border-bottom: 1px solid rgba(255, 182, 193, 0.35);
+      background: transparent;
+      backdrop-filter: blur(0px);
+      border-bottom: 1px solid rgba(255, 182, 193, 0.15);
       position: sticky;
       top: 0;
       z-index: 50;
     }
-
     .navbar-logo {
-      font-size: 1.55rem;
+      font-size: 2.8rem;
       font-weight: 700;
       color: #e63946;
       letter-spacing: 0.02em;
       cursor: pointer;
       user-select: none;
+      font-family: 'Brush Script MT', cursive, 'Poppins', Inter, Arial, sans-serif;
+      text-shadow: 0 4px 18px rgba(230,57,70,0.28), 0 2px 16px #fff, 0 1px 0 #fff, 0 8px 32px #e6394680;
     }
-
     .container {
-      max-width: 980px;
+      max-width: 1100px;
       margin: 64px auto 0 auto;
       padding: 0 20px 70px 20px;
-    }
-
-    .hero {
       display: grid;
-      grid-template-columns: 1fr;
-      gap: 20px;
-      align-items: start;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 22px;
     }
-
     @media (max-width: 900px) {
-      .hero { grid-template-columns: 1fr; }
+      .container { grid-template-columns: 1fr; }
     }
-
     .card {
       background: rgba(255, 255, 255, 0.86);
       border: 1px solid rgba(255, 182, 193, 0.35);
@@ -74,93 +68,7 @@
       box-shadow: 0 18px 40px rgba(50, 50, 50, 0.10);
       overflow: hidden;
     }
-
-    .card-pad { padding: 22px; }
-
-    .title {
-      margin: 0;
-      font-size: 1.7rem;
-      font-weight: 800;
-      color: #62182b;
-      letter-spacing: 0.01em;
-    }
-
-    .subtitle {
-      margin: 8px 0 0 0;
-      color: rgba(34, 35, 42, 0.72);
-      font-weight: 500;
-    }
-
-    .plan {
-      margin-top: 16px;
-      padding: 18px;
-      border-radius: 16px;
-      border: 1px solid rgba(255, 182, 193, 0.55);
-      background: linear-gradient(180deg, rgba(255, 255, 255, 0.92) 0%, rgba(255, 243, 245, 0.92) 100%);
-    }
-
-    .plan-top {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      gap: 14px;
-      flex-wrap: wrap;
-    }
-
-    .plan-name {
-      font-weight: 800;
-      font-size: 1.05rem;
-      color: #62182b;
-    }
-
-    .price {
-      font-weight: 900;
-      font-size: 1.6rem;
-      color: #e63946;
-    }
-
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 12px;
-      border-radius: 999px;
-      font-weight: 700;
-      background: #FFF3F5;
-      border: 1px solid rgba(255, 182, 193, 0.55);
-      color: #c2185b;
-      margin-top: 10px;
-      width: fit-content;
-    }
-
-    ul.features {
-      list-style: none;
-      padding: 0;
-      margin: 14px 0 0 0;
-      display: grid;
-      gap: 10px;
-    }
-
-    ul.features li {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      color: rgba(34, 35, 42, 0.78);
-      font-weight: 600;
-    }
-
-    .form {
-      display: grid;
-      gap: 12px;
-      margin-top: 14px;
-    }
-
-    .actions {
-      display: grid;
-      gap: 10px;
-      margin-top: 12px;
-    }
-
+    .pad { padding: 18px; }
     .btn {
       border: none;
       border-radius: 12px;
@@ -173,19 +81,16 @@
       justify-content: center;
       gap: 10px;
     }
-
     .btn-primary {
       background: linear-gradient(90deg, #ff758c, #e83a4f);
       color: #fff;
       box-shadow: 0 12px 25px rgba(227, 68, 80, 0.18);
     }
-
     .btn-secondary {
       background: rgba(255, 255, 255, 0.8);
       border: 1px solid rgba(255, 182, 193, 0.55);
       color: #62182b;
     }
-
     .note {
       margin: 0;
       color: rgba(34, 35, 42, 0.65);
@@ -193,99 +98,62 @@
       font-size: 0.95rem;
       line-height: 1.5;
     }
-
-    .why h3 {
-      margin: 0;
-      font-size: 1.02rem;
-      color: #62182b;
-    }
-
-    .why p {
-      margin: 10px 0 0 0;
-    }
-
-    .mini {
-      display: grid;
-      gap: 10px;
-      margin-top: 12px;
-    }
-
-    .mini-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 10px 12px;
-      border-radius: 14px;
-      background: #FFF3F5;
-      border: 1px solid rgba(255, 182, 193, 0.40);
-      color: rgba(34, 35, 42, 0.76);
-      font-weight: 600;
-    }
-
-    .mini-row i { color: #e63946; }
   </style>
 </head>
 
 <body>
   <nav class="navbar">
-    <div class="navbar-logo" id="navbarLogo">Vivah</div>
-    <button class="btn btn-secondary" type="button" id="backBtn">
-      <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
-      <span>Back</span>
-    </button>
+    <div class="navbar-left">
+      <div class="navbar-logo" id="navbarLogo">Vivah</div>
+    </div>
   </nav>
 
   <main class="container">
-    <div class="hero">
-      <section class="card">
-        <div class="card-pad">
-          <h1 class="title">Upgrade to unlock Venue Selection</h1>
-          <p class="subtitle">Venue Selection is available only in the ₹1999 Premium plan.</p>
-
-          <div class="plan" aria-label="Premium plan">
-            <div class="plan-top">
-              <div>
-                <div class="plan-name">12 Months — Premium</div>
-                <div class="badge"><i class="fa-solid fa-crown" aria-hidden="true"></i><span>Best value</span></div>
-              </div>
-              <div class="price">₹1999</div>
-            </div>
-
-            <ul class="features" aria-label="Plan features">
-              <li><i class="fa-solid fa-check" aria-hidden="true"></i><span>Venue Suggestions</span></li>
-              <li><i class="fa-solid fa-check" aria-hidden="true"></i><span>Unlimited Matches</span></li>
-              <li><i class="fa-solid fa-check" aria-hidden="true"></i><span>Unlimited Chats</span></li>
-              <li><i class="fa-solid fa-check" aria-hidden="true"></i><span>Vivah Store</span></li>
-              <li><i class="fa-solid fa-check" aria-hidden="true"></i><span>Verified Badge</span></li>
+    <section class="card" style="grid-column: 1 / span 2;">
+      <div class="pad">
+        <h1 style="margin:0;font-size:1.75rem;font-weight:900;color:#62182b;">Upgrade to unlock Venue Selection</h1>
+        <p class="note" style="margin-top:8px;">Venue Selection is available only in the ₹1999 Premium plan.</p>
+        <div style="height: 18px;"></div>
+        <div class="infoBox" style="margin-bottom:18px;">
+          <div class="label">Premium Plan</div>
+          <div class="value" style="font-size:1.2rem;font-weight:900;color:#e63946;">12 Months — ₹1999</div>
+        </div>
+        <div class="infoBox" style="margin-bottom:18px;">
+          <div class="label">Features</div>
+          <div class="value">
+            <ul style="margin:0;padding-left:18px;">
+              <li>Venue Suggestions</li>
+              <li>Unlimited Matches</li>
+              <li>Unlimited Chats</li>
+              <li>Vivah Store</li>
+              <li>Verified Badge</li>
             </ul>
           </div>
-
-          <div class="why" aria-label="Why Premium">
-            <h3>Why Premium?</h3>
-            <p class="note">Premium unlocks venue suggestions and more wedding planning features.</p>
-
-            <div class="mini" role="list">
-              <div class="mini-row" role="listitem"><i class="fa-solid fa-lock-open" aria-hidden="true"></i><span>Unlock venues instantly</span></div>
-              <div class="mini-row" role="listitem"><i class="fa-solid fa-shield-heart" aria-hidden="true"></i><span>Verified badge</span></div>
-              <div class="mini-row" role="listitem"><i class="fa-solid fa-comments" aria-hidden="true"></i><span>Unlimited chats</span></div>
-            </div>
-          </div>
-
-          <div class="actions" aria-label="Upgrade actions">
-            <button class="btn btn-primary" type="button" id="upgradePayBtn">
-              <i class="fa-solid fa-bolt" aria-hidden="true"></i>
-              <span>Upgrade & Pay ₹1999</span>
-            </button>
-            <button class="btn btn-secondary" type="button" id="goVenueBtn">
-              <i class="fa-solid fa-building-columns" aria-hidden="true"></i>
-              <span>Go to Venue Selection</span>
-            </button>
-          </div>
-
-          <p class="note">After payment completes, Venue Selection will unlock automatically.</p>
         </div>
-      </section>
-    </div>
+        <div class="infoBox" style="margin-bottom:18px;">
+          <div class="label">Why Premium?</div>
+          <div class="value">
+            Premium unlocks venue suggestions and more wedding planning features.<br>
+            <ul style="margin:8px 0 0 18px;">
+              <li>Unlock venues instantly</li>
+              <li>Verified badge</li>
+              <li>Unlimited chats</li>
+            </ul>
+          </div>
+        </div>
+        <div class="cta" style="margin-top:18px;">
+          <button class="btn btn-primary" type="button" id="upgradePayBtn">
+            <i class="fa-solid fa-bolt" aria-hidden="true"></i>
+            <span>Upgrade & Pay ₹1999</span>
+          </button>
+          <button class="btn btn-secondary" type="button" id="goVenueBtn">
+            <i class="fa-solid fa-building-columns" aria-hidden="true"></i>
+            <span>Go to Venue Selection</span>
+          </button>
+        </div>
+        <p class="note" style="margin-top:18px;">After payment completes, Venue Selection will unlock automatically.</p>
+      </div>
+    </section>
   </main>
 
   <script>

@@ -12,6 +12,17 @@
 
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   <script src="booking-integration.js"></script>
+  <script type="module">
+    import { fetchBookedDatesForVenue, markBookedDates } from './script.js/calendar-booked-dates.js';
+    window.addEventListener('DOMContentLoaded', async () => {
+      const id = (new URLSearchParams(location.search)).get('id');
+      if (!id) return;
+      const bookingDateEl = document.getElementById('bookingDate');
+      if (!bookingDateEl) return;
+      const bookedDates = await fetchBookedDatesForVenue(id);
+      markBookedDates(bookingDateEl, bookedDates);
+    });
+  </script>
 
   <style>
     * { box-sizing: border-box; }
@@ -32,7 +43,7 @@
       justify-content: space-between;
       padding: 18px 34px;
       box-sizing: border-box;
-      background: rgba(255, 255, 255, 0.82);
+      background: transparent;
       backdrop-filter: blur(14px);
       border-bottom: 1px solid rgba(255, 182, 193, 0.35);
       position: sticky;
@@ -47,12 +58,14 @@
     }
 
     .navbar-logo {
-      font-size: 1.55rem;
+      font-size: 2.8rem;
       font-weight: 700;
       color: #e63946;
       letter-spacing: 0.02em;
       cursor: pointer;
       user-select: none;
+      font-family: 'Brush Script MT', cursive, 'Poppins', Inter, Arial, sans-serif;
+      text-shadow: 2px 4px 18px rgba(230,57,70,0.28), 0 2px 8px rgba(0,0,0,0.18), 0 1px 0 #fff;
     }
 
     .nav-btn {
@@ -225,9 +238,6 @@
 <body>
   <nav class="navbar">
     <div class="navbar-left">
-      <button class="nav-btn" type="button" id="backBtn" aria-label="Back">
-        <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
-      </button>
       <div class="navbar-logo" id="navbarLogo">Vivah</div>
     </div>
     <button class="nav-btn" type="button" id="myBookingsBtn" aria-label="My bookings">
@@ -293,7 +303,7 @@
         type: 'Banquet Hall',
         address: 'Grand Wedding Hall, Andheri East, Mumbai, Maharashtra',
         phone: '+91 90000 10001',
-        image: 'images/sem6matrimonialimg.png',
+        image: "vivahvenue/Grand Wedding Hall.jpg",
         desc: 'Spacious indoor venue with stage and dining. Ideal for premium functions with large guest lists.'
       },
       garden: {
@@ -304,7 +314,7 @@
         type: 'Garden Venue',
         address: 'Royal Garden Lawns, Baner, Pune, Maharashtra',
         phone: '+91 90000 10002',
-        image: 'images/littleheart5.jpg',
+        image: "vivahvenue/Royal Garden Lawns.avif",
         desc: 'Open-air lawns for a beautiful evening wedding with a scenic setup.'
       },
       resort: {
@@ -315,7 +325,7 @@
         type: 'Resort Venue',
         address: 'Lakeview Resort, Fateh Sagar Lake Road, Udaipur, Rajasthan',
         phone: '+91 90000 10003',
-        image: 'images/littleheart4.jpg',
+        image: "vivahvenue/Lakeview Resort.jpg",
         desc: 'Luxury resort venue for destination weddings with premium hospitality.'
       },
       beach: {
@@ -326,7 +336,7 @@
         type: 'Beach Venue',
         address: 'Seaside Mandap, Baga Beach Road, Goa',
         phone: '+91 90000 10004',
-        image: 'images/littleheart3.jpg',
+        image: "vivahvenue/Seaside Mandap.jpg",
         desc: 'Beach ceremony setup with sunset vibes and a stunning coastal ambience.'
       },
       palace: {
@@ -338,7 +348,7 @@
         pax: '100-900 pax',
         address: 'Heritage Palace Venue, Amer Road, Jaipur, Rajasthan',
         phone: '+91 90000 10005',
-        image: 'images/sem6matrimonialimg.png',
+        image: "vivahvenue/Heritage Palace Venue.jpg",
         desc: 'Royal palace venue for grand weddings with heritage architecture and premium services.'
       },
       rooftop: {
@@ -349,7 +359,7 @@
         type: 'Rooftop Venue',
         address: 'Skyline Rooftop Banquet, MG Road, Bengaluru, Karnataka',
         phone: '+91 90000 10006',
-        image: 'images/littleheart5.jpg',
+        image: "vivahvenue/Skyline Rooftop Banquet.webp",
         desc: 'Open rooftop with city lights and premium dining.'
       },
       temple: {
@@ -360,7 +370,7 @@
         type: 'Convention Hall',
         address: 'Temple Wedding Hall, Mylapore, Chennai, Tamil Nadu',
         phone: '+91 90000 10007',
-        image: 'images/littleheart4.jpg',
+        image: "vivahvenue/Temple Wedding Hall.jpg",
         desc: 'Traditional wedding hall with ample seating and decor.'
       },
       hillside: {
@@ -371,7 +381,7 @@
         type: 'Resort',
         address: 'Hillside Retreat, Tungarli, Lonavala, Maharashtra',
         phone: '+91 90000 10008',
-        image: 'images/littleheart2.jpg',
+        image: "vivahvenue/Hillside Retreat.jpeg",
         desc: 'A peaceful retreat for intimate celebrations surrounded by hills and greenery.'
       },
       riverside: {
@@ -382,7 +392,7 @@
         type: 'Lawn Venue',
         address: 'Riverside Lawn, Tapovan, Rishikesh, Uttarakhand',
         phone: '+91 90000 10009',
-        image: 'images/littleheart1.jpg',
+        image: "vivahvenue/Riverside Lawn.jpeg",
         desc: 'Scenic riverside lawn for intimate premium weddings with calm vibes.'
       },
       farmhouse: {
@@ -393,7 +403,7 @@
         type: 'Farmhouse Venue',
         address: 'Hilltop Farmhouse, Chhatarpur, New Delhi, Delhi',
         phone: '+91 90000 10010',
-        image: 'images/littleheart2.jpg',
+        image: "vivahvenue/Hilltop Farmhouse.jpeg",
         desc: 'Farmhouse setup with open lawn and indoor hall for premium functions.'
       }
     };

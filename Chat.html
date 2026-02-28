@@ -6,6 +6,7 @@
   <title>Chat – Vivah</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg: #130b14;
@@ -73,6 +74,37 @@
       font-weight: 700;
     }
 
+    .vivah-logo {
+      font-family: 'Dancing Script', cursive;
+      font-size: 2.2rem;
+      font-weight: 700;
+      background: linear-gradient(90deg, #FFD700 20%, #FFF8E7 40%, #FFD700 60%, #fff 80%);
+      background-size: 200% auto;
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: #FFD700;
+      letter-spacing: 0.03em;
+      text-shadow: 0 2px 8px rgba(255, 215, 0, 0.18), 0 0 12px #fff;
+      animation: glitter-gold 2s linear infinite;
+    }
+
+    @keyframes glitter-gold {
+      0% {
+        background-position: 0% 50%;
+        text-shadow: 0 2px 8px rgba(255, 215, 0, 0.18), 0 0 12px #fff;
+      }
+      50% {
+        background-position: 100% 50%;
+        text-shadow: 0 2px 16px #FFD700, 0 0 24px #fff;
+      }
+      100% {
+        background-position: 0% 50%;
+        text-shadow: 0 2px 8px rgba(255, 215, 0, 0.18), 0 0 12px #fff;
+      }
+    }
+  
+
     .brand-dot {
       width: 34px;
       height: 34px;
@@ -98,14 +130,19 @@
       color: var(--text);
       padding: 0 14px;
       outline: none;
-      font-size: 0.9rem;
-    }
-
-    .chat-list {
-      flex: 1;
-      min-height: 0;
-      padding: 8px;
-      overflow-y: auto;
+      font-size: 2.8rem;
+      font-family: 'Dancing Script', cursive, 'Poppins', Inter, Arial, sans-serif;
+      font-weight: 700;
+      color: #F6C177;
+      background: linear-gradient(90deg, #F6C177 20%, #FFF8E7 40%, #F6C177 60%);
+      background-size: 200% auto;
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: shine-logo 2.5s linear infinite;
+      letter-spacing: 0.02em;
+      cursor: pointer;
+      user-select: none;
       display: flex;
       flex-direction: column;
       gap: 6px;
@@ -143,6 +180,30 @@
       border-radius: 12px;
       border: 1px solid transparent;
       background: transparent;
+    }
+
+    .chat-remove {
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--muted);
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      opacity: 0;
+      flex: 0 0 auto;
+    }
+
+    .chat-item:hover .chat-remove {
+      opacity: 1;
+    }
+
+    .chat-remove:hover {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: var(--border);
+      color: var(--text);
     }
 
     .chat-item.active {
@@ -548,22 +609,17 @@
       <div class="sidebar-header">
         <div class="sidebar-brand">
           <div class="brand-dot"><i class="fa-solid fa-comments"></i></div>
-          <span>Vivah Chat</span>
+          <span class="vivah-logo">Vivah</span>
         </div>
         <i class="fa-solid fa-ellipsis-vertical" style="opacity:.75"></i>
       </div>
-      <div class="sidebar-search">
-        <input type="text" value="Search or start new chat" readonly aria-label="Search" />
-      </div>
+        <!-- Search or start new chat input removed -->
       <div class="chat-list" id="chatList"></div>
     </aside>
 
     <section class="chat-main">
       <header class="chat-topbar">
-        <div class="chat-icon dp">
-          <img id="chatAvatarImg" alt="Chat profile photo" />
-          <i id="chatAvatarFallback" class="fa-solid fa-user"></i>
-        </div>
+        <!-- Chat icon removed -->
         <div>
           <h1 id="chatTitle">Global Chat</h1>
           <p id="chatSubtitle">Dummy local chat model</p>
